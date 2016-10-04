@@ -1,0 +1,42 @@
+.html, body {
+
+	height: 100%;
+}
+
+#ask-mainSearchField {
+
+	width: 300px;
+}
+
+.ask-navbar {
+
+	margin-bottom: 0px;
+
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+.ask-navbarBrand {
+
+	font-size: 40px;
+}
+
+.ask-rightColumn {
+
+	margin-top: 20px;
+	padding-right: 50px;
+}
+
+.ask-popularTags {
+
+	font-size: 23px;
+}
+
+.ask-bestMembers > li {
+
+	font-size: 20px;
+	margin: 10px 0;
+}
+
+
+

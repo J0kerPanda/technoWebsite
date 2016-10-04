@@ -1,0 +1,79 @@
+.ask-questionList {
+
+	overflow: hidden;
+
+	padding-left: 20px;
+}
+
+.ask-questionListSubHeader {
+
+	margin-left: 30px;
+}
+
+.ask-questionListElement {
+
+	margin-top: 15px;
+	padding: 0px;
+}
+
+.ask-questionListElementUserBlock {
+
+	padding: 9px;
+}
+
+.ask-questionRatingBlock {
+
+	margin-top: 3px;
+
+	width:70px;
+	height: 25px;
+}
+
+.ask-questionRatingField {
+
+	min-height: 0px;
+	width: 85%;
+	height: 100%;
+	
+	margin: 0px;
+	padding: 2px 3px;
+	
+	background-color: white;
+}
+
+.ask-ratingButtonsGroup {
+
+	width: 15%;
+	height: 100%;
+}
+
+.ask-ratingButtonsGroup > .ask-ratingButton {
+
+	width: 100%;
+	height: 50%;
+
+	margin: 0px;
+	padding: 0px;
+}
+
+.ask-questionListElementQuestionBlock {
+
+	padding-right: 0px;
+	padding-bottom: 9px;
+	padding-right: 15px;
+	width:100%;
+}
+
+.ask-questionListElementCaption {
+
+	margin-top: 5px;
+
+}
+
+.ask-questionListElementBottomLine > .lead {
+
+	margin-bottom: 0px;
+}
+
+
+
