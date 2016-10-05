@@ -56,6 +56,16 @@
 	padding: 0px;
 }
 
+.ask-ratingUpButton {
+
+	background-color: #c0d890;
+}
+
+.ask-ratingDownButton {
+
+	background-color: #ffb366;
+}
+
 .ask-questionListElementQuestionBlock {
 
 	padding-right: 0px;
