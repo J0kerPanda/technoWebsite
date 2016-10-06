@@ -8,6 +8,12 @@
 	width: 300px;
 }
 
+#ask-profilePicture {
+
+	width: 64px;
+	height: 64px;
+}
+
 .ask-navbar {
 
 	margin-bottom: 0px;
