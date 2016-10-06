@@ -13,11 +13,6 @@
 .ask-questionListElement {
 
 	margin-top: 15px;
-	padding: 0px;
-}
-
-.ask-questionListElementUserBlock {
-
 	padding: 9px;
 }
 
@@ -47,7 +42,7 @@
 	height: 100%;
 }
 
-.ask-ratingButtonsGroup > .ask-ratingButton {
+.ask-ratingButton {
 
 	width: 100%;
 	height: 50%;
@@ -68,7 +63,8 @@
 
 .ask-questionListElementQuestionBlock {
 
-	padding-right: 0px;
+	position: relative;
+
 	padding-bottom: 9px;
 	padding-right: 15px;
 	width:100%;
@@ -77,7 +73,14 @@
 .ask-questionListElementCaption {
 
 	margin-top: 5px;
+}
 
+.ask-questionListElementBottomLine {
+
+	position: absolute;
+
+	width: 95%;
+	bottom: 0px;
 }
 
 .ask-questionListElementBottomLine > .lead {
