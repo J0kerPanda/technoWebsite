@@ -1,0 +1,14 @@
+#error_log /var/log/nginx.error_log info;
+
+#log_format simple '$remote_addr $request $status';
+	
+server {
+	
+	listen 80;
+	server_name asksemenov.com www.asksemenov.com;
+
+	location /static/ {
+
+		alias /home/anton/ask_semenov/static/;
+	}
+}
