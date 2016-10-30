@@ -2,8 +2,9 @@
 <html>
 
 	<head>
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../static/css/ask.css">
+		<link rel="stylesheet" href="../static/css/base.css">
 	</head>
 
 	<body>
@@ -35,7 +36,7 @@
 
 									<div class="media-left media-middle">
 										<a class="navbar-link" href="#">
-											<img id="ask-profilePicture" class="media-object img-circle" src="img/dummy.png">
+											<img id="ask-profilePicture" class="media-object img-circle" src="../static/img/dummy.png">
 										</a>
 									</div>
 
@@ -58,6 +59,55 @@
 		<div class="row">
 				
 			<div class="container col-md-9"> <!-- insert page custom content here-->
+
+				<div class="container-fluid">
+
+					<h2>Your question</h2>
+
+					<form class="col-md-10 ask-askFormContainer">
+
+						<div class="form-horizontal">
+
+							<div class="form-group">
+
+								<label for="ask-questionTitleInput" class="col-sm-2 control-label">Title</label>
+								<div class="col-sm-9">
+									<input id="ask-questionTitleInput" class="form-control" type="text" placeholder="Your question name">
+								</div>
+
+							</div>
+
+							<div class="form-group">
+
+								<label for="ask-questionTextInput" class="col-sm-2 control-label">Text</label>
+								<div class="col-sm-9">
+									<textarea id="ask-questionTextInput" class="form-control" type="text" rows="15" placeholder="Place your question here"></textarea>
+								</div>
+
+							</div>
+
+							<div class="form-group">
+
+								<label for="ask-questionTagsInput" class="col-sm-2 control-label">Tags</label>
+								<div class="col-sm-9">
+									<input id="ask-questionTagsInput" class="form-control" type="text" placeholder="Tags">
+								</div>
+
+							</div>
+
+							<div class="form-group">
+
+								<div class="col-sm-7 col-sm-offset-2">
+									<button type="submit" class="btn btn-default">Ask!</button>
+								</div>
+
+							</div>
+
+						</div> <!-- form-horizontal end -->
+
+					</form>
+
+				</div>
 
 			</div> <!-- custom content end -->
 

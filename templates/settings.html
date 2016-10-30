@@ -2,9 +2,9 @@
 <html>
 
 	<head>
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/login.css">
-		<link rel="stylesheet" href="css/base.css">
+		<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../static/css/settings.css">
+		<link rel="stylesheet" href="../static/css/base.css">
 	</head>
 
 	<body>
@@ -29,14 +29,26 @@
 							<button type="submit" class="btn btn-lg btn-default">Ask!</button>
 						</form>
 
-						<ul class="nav navbar-nav navbar-right ask-navbarLoginSection">
+						<ul class="nav navbar-nav navbar-right">
 
-							<li>
-								<a href="#">log in</a>
-							</li>
+							<li class="pull-right">
+								<div class="media">
 
-							<li>
-								<a href="#">register</a>
+									<div class="media-left media-middle">
+										<a class="navbar-link" href="#">
+											<img id="ask-profilePicture" class="media-object img-circle" src="../static/img/dummy.png">
+										</a>
+									</div>
+
+									<div class="media-right">
+										<h4>Username</h4>
+										<div>
+											<a href="#">Settings</a>
+											<a href="#">Log out</a>
+										</div>
+									</div>
+
+								</div>
 							</li>
 
 						</ul>
@@ -50,11 +62,9 @@
 
 				<div class="container-fluid">
 
-					<h2>Login</h2>
+					<h2>Settings: Username</h2>
 
-					<h4 class="text-danger">This message indicates an error</h4>
-
-					<form class="col-md-10 ask-loginFormContainer">
+					<form class="col-md-10 ask-settingsFormContainer">
 
 						<div class="form-horizontal">
 
@@ -69,9 +79,29 @@
 
 							<div class="form-group">
 
-								<label for="ask-passwordInput" class="col-sm-2 control-label">Password</label>
+								<label for="ask-emailInput" class="col-sm-2 control-label">Email</label>
 								<div class="col-sm-9">
-									<input id="ask-passwordInput" class="form-control" type="password" placeholder="Password">
+									<input id="ask-emailInput" class="form-control" type="email" placeholder="Email">
+								</div>
+
+							</div>
+
+							<div class="form-group">
+
+								<label for="ask-nicknameInput" class="col-sm-2 control-label">Nickname</label>
+								<div class="col-sm-9">
+									<input id="ask-nicknameInput" class="form-control" type="text" placeholder="Nickname">
+								</div>
+
+							</div>
+
+							<div class="form-group">
+
+								<label for="ask-avatarInput" class="col-sm-2 control-label">Avatar</label>
+								<div class="col-sm-9">
+
+									<img id="ask-newProfilePicture" class="img-circle" src="../static/img/dummy.png">
+									<input id="ask-avatarInput" type="file" class="form-control-file">
 								</div>
 
 							</div>
@@ -79,21 +109,15 @@
 							<div class="form-group">
 
 								<div class="col-sm-7 col-sm-offset-2">
-									<button type="submit" class="btn btn-default">Log in</button>
+									<button type="submit" class="btn btn-default">Save</button>
 								</div>
-							</div>
 
-							<div class="form-group">
-							
-								<div class="col-sm-7 col-sm-offset-2">
-									<a class="ask-createAccountLink" href="#">Create new account</a>
-								</div>
 							</div>
 
 						</div> <!-- form-horizontal end -->
 
 					</form>
-					
+
 				</div>
 
 			</div> <!-- custom content end -->
