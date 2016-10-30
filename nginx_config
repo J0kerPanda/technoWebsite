@@ -1,14 +1,59 @@
-#error_log /var/log/nginx.error_log info;
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
 
-#log_format simple '$remote_addr $request $status';
-	
-server {
-	
-	listen 80;
-	server_name asksemenov.com www.asksemenov.com;
+events {
+	worker_connections 768;
+	# multi_accept on;
+}
 
-	location /static/ {
+http {
 
-		alias /home/anton/ask_semenov/static/;
+	log_format cache_status '[$time_local] "$request" $upstream_cache_status';
+
+	include /etc/nginx/mime.types;
+	default_type application/octet-stream;
+	access_log /var/log/nginx/access.log cache_status;
+	error_log /var/log/nginx/error.log;
+
+	include /etc/nginx/conf.d/*.conf;
+	#include /etc/nginx/sites-enabled/*;
+
+	sendfile on;
+	tcp_nopush on;
+	tcp_nodelay on;
+	keepalive_timeout 65;
+	types_hash_max_size 2048;
+
+	gzip on;
+	proxy_cache_path /home/anton/ask_semenov/cache keys_zone=cache1:10m;
+
+	upstream backend {
+
+		server 127.0.0.1:8081;
+	}
+
+	server {
+
+		listen 80;
+		server_name asksemenov.com www.asksemenov.com;
+		root /home/anton/ask_semenov;
+		add_header X-Cache-Status $upstream_cache_status;
+
+		location ^~ /uploads/ {
+		}
+
+		location ~ (\..+)$ {
+
+			root /home/anton/ask_semenov/static;
+		}
+
+		location ~ \/$ {
+
+			proxy_cache cache1;
+			proxy_cache_key "$host$request_uri";
+			proxy_cache_valid 200 10m;
+			proxy_pass http://backend;
+		}
 	}
 }

@@ -3,15 +3,27 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpRequest
 
-# Create your views here.
+from django.http import Http404
+
+import re
+header_regexp = re.compile( r'^(HTTP_.+$|CONTENT_TYPE|CONTENT_LENGTH)$' )
 
 def helloWorld( request ):
+	
 	try:
+
+		data = "This is brand new hello world!\n"
+
+		for key in request.META.keys():
+
+			if ( header_regexp.match( key ) and request.META.get( key ) ):
+
+				data += ( str( key ) + ": " + str( request.META.get( key ) ) + '\n' )
 		
-		return HttpResponse( 'hello world\n', content_type='text/plain' )
+		return HttpResponse( data, content_type='text/plain' )
 
 	except:
-		raise Http404
+		raise Http404('Something went horribly wrong')
 
 	
 
