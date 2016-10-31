@@ -24,7 +24,7 @@
 	margin-top: 3px;
 
 	width:95px;
-	height: 25px;
+	height: 30px;
 }
 
 .ask-questionRatingField {
@@ -35,6 +35,7 @@
 	
 	margin: 0px;
 	padding: 2px 3px;
+	font-size: 17px;
 	
 	background-color: white;
 }
@@ -101,7 +102,7 @@
 	margin-top: 3px;
 
 	width:70px;
-	height: 25px;
+	height: 30px;
 }
 
 .ask-answerRatingField {
@@ -112,6 +113,7 @@
 	
 	margin: 0px;
 	padding: 2px 3px;
+	font-size: 17px;
 	
 	background-color: white;
 }

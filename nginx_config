@@ -41,11 +41,16 @@ http {
 		add_header X-Cache-Status $upstream_cache_status;
 
 		location ^~ /uploads/ {
+
+			expires 1h;
+			add_header Cache-Control "public";
 		}
 
 		location ~ (\..+)$ {
 
 			root /home/anton/ask_semenov/static;
+			expires 1h;
+			add_header Cache-Control "public";
 		}
 
 		location ~ \/$ {
