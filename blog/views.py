@@ -14,6 +14,13 @@ def helloWorld( request ):
 
 		data = "This is brand new hello world!\n"
 
+		for key in request.GET.keys():
+			data += ( str( key ) + ": " + str( request.GET.get( key ) ) + '\n' )
+
+		for key in request.POST.keys():
+			data += ( str( key ) + ": " + str( request.POST.get( key ) ) + '\n' )
+			
+
 		for key in request.META.keys():
 
 			if ( header_regexp.match( key ) and request.META.get( key ) ):
