@@ -5,43 +5,29 @@ from django.http import HttpRequest
 
 from django.http import Http404
 
-import re
-header_regexp = re.compile( r'^(HTTP_.+$|CONTENT_TYPE|CONTENT_LENGTH)$' )
+class User:
 
-def helloWorld( request ):
-	
-	try:
-
-		data = "This is brand new hello world!\n"
-
-		for key in request.GET.keys():
-			data += ( str( key ) + ": " + str( request.GET.get( key ) ) + '\n' )
-
-		for key in request.POST.keys():
-			data += ( str( key ) + ": " + str( request.POST.get( key ) ) + '\n' )
-			
-
-		for key in request.META.keys():
-
-			if ( header_regexp.match( key ) and request.META.get( key ) ):
-
-				data += ( str( key ) + ": " + str( request.META.get( key ) ) + '\n' )
-		
-		return HttpResponse( data, content_type='text/plain' )
-
-	except:
-		raise Http404('Something went horribly wrong')
+	def __init__( self, name, loginStatus ):
+		self.name = name;
+		self.loggedIn = loginStatus
 
 def mainPage( request ):
 
-	try:
+	hotTags = []
+	bestMembers = []
 
-		data = "mainPage here!\n"
-		
-		return HttpResponse( data, content_type='text/plain' )
+	for i in range( 10 ):
+		hotTags.append( str( i ) )
 
-	except:
-		raise Http404('Something went horribly wrong')
+	for i in range( 10 ):
+		bestMembers.append( str( i ) );
+	
+	return render( request, 'base.html', {
+
+		'user': User( 'Antony', True ),
+		'hotTags': hotTags,
+		'bestMembers': bestMembers,
+		})
 
 def hotQuestions( request ):
 
