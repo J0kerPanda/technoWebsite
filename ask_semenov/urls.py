@@ -16,8 +16,14 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from blog import views as blog_views
+from blog import views as blogViews
 
 urlpatterns = [
-	url(r'$', blog_views.helloWorld, name="hello world"),
+	url(r'^$', blogViews.mainPage, name="mainPage"),
+	url(r'^hot/$', blogViews.hotQuestions, name="hotQuestions"),
+	url(r'^tag/(?P<tag>\w+)/$', blogViews.taggedQuestions, name="taggedQuestions"),
+	url(r'^question/(?P<questionID>\d+)/$', blogViews.singleQuestion, name="singleQuestion"),
+	url(r'^login/$', blogViews.login, name="login"),
+	url(r'^signup/$', blogViews.signup, name="signup"),
+	url(r'^ask/$', blogViews.ask, name="makeQuestion")
 ]

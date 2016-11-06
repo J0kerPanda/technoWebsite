@@ -32,6 +32,100 @@ def helloWorld( request ):
 	except:
 		raise Http404('Something went horribly wrong')
 
+def mainPage( request ):
+
+	try:
+
+		data = "mainPage here!\n"
+		
+		return HttpResponse( data, content_type='text/plain' )
+
+	except:
+		raise Http404('Something went horribly wrong')
+
+def hotQuestions( request ):
+
+	try:
+
+		data = "HotQuestions here!\n"
+		
+		return HttpResponse( data, content_type='text/plain' )
+
+	except:
+		raise Http404('Something went horribly wrong')
+
+
+def hotQuestions( request ):
+
+	try:
+
+		data = "HotQuestions here!\n"
+		
+		return HttpResponse( data, content_type='text/plain' )
+
+	except:
+		raise Http404('Something went horribly wrong')
+
+def taggedQuestions( request, tag=None ):
+
+	try:
+
+		data = "taggedQuestions here!\n" + str( tag ) + '\n'
+		
+		return HttpResponse( data, content_type='text/plain' )
+
+	except:
+		raise Http404('Something went horribly wrong')
+
+def singleQuestion( request, questionID=None ):
+
+	try:
+
+		data = "singleQuestion here!\n" + str( questionID ) + '\n'
+		
+		return HttpResponse( data, content_type='text/plain' )
+
+	except:
+		raise Http404('Something went horribly wrong')
+
+def login( request ):
+
+	try:
+
+		data = "login here!\n"
+		
+		return HttpResponse( data, content_type='text/plain' )
+
+	except:
+		raise Http404('Something went horribly wrong')
+
+def signup( request ):
+
+	try:
+
+		data = "signup here!\n"
+		
+		return HttpResponse( data, content_type='text/plain' )
+
+	except:
+		raise Http404('Something went horribly wrong')
+
+def ask( request ):
+
+	try:
+
+		data = "makeQuestion here!\n"
+		
+		return HttpResponse( data, content_type='text/plain' )
+
+	except:
+		raise Http404('Something went horribly wrong')
+
+
+
+
+
+
 	
 
 
