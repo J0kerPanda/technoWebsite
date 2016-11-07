@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 
-{% block extraCSS %}<link rel="stylesheet" href="/css/questionlist.css"> {% endblock %}
+{%load static %}
+
+{% block extraCSS %}<link rel="stylesheet" href="{% static "/css/questionlist.css" %}"> {% endblock %}
+
+{% block customContentCaption %}
+<div class="container-fluid">
+	<h2>New Questions<small class="ask-questionListSubHeader"><a>Hot questions</a></small></h2>
+</div>
+{% endblock %}
 
 
 {% block customContent %}
 <div class="container-fluid">
-
-	<h2>New Questions<small class="ask-questionListSubHeader"><a>Hot questions</a></small></h2>
 
 	<div class="col-md-11 ask-questionList">
 
@@ -19,7 +25,7 @@
 					<div class="media-left ask-questionListElementUserBlock">
 
 						<a href="#">
-							<img class="media-object img-circle" src="../img/dummy.png">
+							<img class="media-object img-circle" src="{% static "img/dummy.png" %}">
 						</a>
 
 						<div class="ask-questionRatingBlock">

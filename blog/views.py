@@ -22,29 +22,30 @@ class Question:
 
 def mainPage( request ):
 
+	try:
 
-	hotTags = []
-	bestMembers = []
-	questions = []
+		hotTags = []
+		bestMembers = []
+		questions = []
 
-	for i in range( 10 ):
-		hotTags.append( str( i ) )
+		for i in range( 10 ):
+			hotTags.append( str( i ) )
 
-	for i in range( 10 ):
-		bestMembers.append( str( i ) )
+		for i in range( 10 ):
+			bestMembers.append( str( i ) )
 
-	for i in range( 10 ):
-		questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
-	
-	return render( request, 'index.html', {
+		for i in range( 10 ):
+			questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
+		
+		return render( request, 'index.html', {
 
-		'user': User( 'Antony', False ),
-		'questions': questions,
-		'hotTags': hotTags,
-		'bestMembers': bestMembers,
-		})
-
-
+			'user': User( 'Antony', False ),
+			'questions': questions,
+			'hotTags': hotTags,
+			'bestMembers': bestMembers,
+			})
+	except:
+		raise Http404('Something went horribly wrong')
 
 def hotQuestions( request ):
 
@@ -61,9 +62,27 @@ def taggedQuestions( request, tag=None ):
 
 	try:
 
-		data = "taggedQuestions here!\n" + str( tag ) + '\n'
+		hotTags = []
+		bestMembers = []
+		questions = []
+
+		for i in range( 10 ):
+			hotTags.append( str( i ) )
+
+		for i in range( 10 ):
+			bestMembers.append( str( i ) )
+
+		for i in range( 10 ):
+			questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
 		
-		return HttpResponse( data, content_type='text/plain' )
+		return render( request, 'questiontags.html', {
+
+			'user': User( 'Antony', False ),
+			'questions': questions,
+			'hotTags': hotTags,
+			'bestMembers': bestMembers,
+			'tag': tag,
+			})
 
 	except:
 		raise Http404('Something went horribly wrong')

@@ -121,5 +121,5 @@ USE_TZ = True
 
 #Insert static variable here if needed
 
-STATIC_URL = '/static/'
+STATIC_URL = '/'
 	
