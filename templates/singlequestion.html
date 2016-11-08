@@ -26,16 +26,19 @@
 		</div> <!-- end of userBlock -->
 
 		<div class="media-right ask-questionListElementQuestionBlock">
-			<h3 class="ask-questionListElementCaption"><a href="#"> {{ question.caption }} </a></h3>
+			{% url 'answer' question.id as questionURL %}
+			<h3 class="ask-questionListElementCaption"><a href="{{ questionURL }}"> {{ question.caption }} </a></h3>
 
 			<div><p> {{ question.text }} </p></div><br>
 
 			<div class="ask-questionListElementBottomLine">
-				<a class="lead" href="#">Answer ({{ question.answersCount }})</a> 
+				{% url 'answer' question.id as questionURL %}
+				<a class="lead" href="{{ questionURL }}">Answer ({{ question.answersCount }})</a> 
 				<span class="lead pull-right ask-questionListElementTags">
 					Tags:
 					{% for tag in question.tags %}
-					<a href="#">{{ tag }}</a>
+					{% url 'taggedQuestions' tag as taggedQuestionsUrl %}
+					<a href="{{ taggedQuestionsUrl }}">{{ tag }}</a>
 					{% endfor %}
 				</span>
 			</div>

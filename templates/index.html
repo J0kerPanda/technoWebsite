@@ -6,7 +6,8 @@
 
 {% block customContentCaption %}
 <div class="container-fluid">
-	<h2>New Questions<small class="ask-questionListSubHeader"><a>Hot questions</a></small></h2>
+  {% url 'hotQuestions' as hotQuestionsURL %}
+	<h2>New Questions<small class="ask-questionListSubHeader"><a href="{{ hotQuestionsURL }}">Hot questions</a></small></h2>
 </div>
 {% endblock %}
 

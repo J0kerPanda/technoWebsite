@@ -41,7 +41,8 @@
 					<span class="lead ask-questionTags">
 						Tags:
 						{% for tag in question.tags %}
-						<a href="#">{{ tag }}</a>
+						{% url 'taggedQuestions' tag as taggedQuestionsURL %}
+						<a href="{{ taggedQuestionsURL }}">{{ tag }}</a>
 						{% endfor %}
 					</span>
 				</div>

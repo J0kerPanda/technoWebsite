@@ -2,6 +2,7 @@
 
 {% block customContentCaption %}
 <div class="container-fluid">
-	<h2>Hot questions<small class="ask-questionListSubHeader"><a>New questions</a></small></h2>
+	{% url 'mainPage' as mainPageURL %}
+	<h2>Hot questions<small class="ask-questionListSubHeader"><a href="{{ mainPageURL }}">New questions</a></small></h2>
 </div>
 {% endblock %}

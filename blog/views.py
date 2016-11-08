@@ -41,7 +41,7 @@ def makeBase():
 
 	return {
 
-		'user': User( 'Antony', True ),
+		'user': User( 'Antony', False ),
 		'hotTags': hotTags,
 		'bestMembers': bestMembers,
 	}
@@ -101,24 +101,22 @@ def taggedQuestions( request, tag=None ):
 
 def answer( request, questionID=None ):
 
-	try:
 
-		result = makeBase()
-		
-		answers = []
-
-		for i in range( 10 ):
-			answers.append( Answer( str( i ), ( str( i ) + " " ) * 150 ) )
-
-		question = Question( 'THIS IS SINGLE QUESTION ' + str( questionID ), 'a ' * 200, 0 )
-		question.tags = [ 'Work', 'on', 'this' ]
-
-		result[ 'answers' ] = answers
-		result[ 'question' ] = question
+	result = makeBase()
 	
-		return render( request, 'answer.html', result )
-	except:
-		raise Http404('Something went horribly wrong')
+	answers = []
+
+	for i in range( 10 ):
+		answers.append( Answer( str( i ), ( str( i ) + " " ) * 150 ) )
+
+	question = Question( str( questionID ), 'a ' * 200, 0 )
+	question.tags = [ 'Work', 'on', 'this' ]
+
+	result[ 'answers' ] = answers
+	result[ 'question' ] = question
+
+	return render( request, 'answer.html', result )
+	
 
 def login( request ):
 
