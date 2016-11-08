@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extraCSS %}<link rel="stylesheet" href="{% static "css/settings.css" %}"> {% endblock %}
+
+{% block customContent %}
+<div class="container-fluid">
+
+	<h2>Registration</h2>
+
+	<h4 class="text-danger">This message indicates an error</h4>
+
+	<form class="col-md-10 ask-registrationFormContainer">
+
+		<div class="form-horizontal">
+
+			<div class="form-group">
+
+				<label for="ask-loginInput" class="col-sm-2 control-label">Login</label>
+				<div class="col-sm-9">
+					<input id="ask-loginInput" class="form-control" type="text" placeholder="Login">
+				</div>
+
+			</div>
+
+			<div class="form-group">
+
+				<label for="ask-emailInput" class="col-sm-2 control-label">Email</label>
+				<div class="col-sm-9">
+					<input id="ask-emailInput" class="form-control" type="email" placeholder="Email">
+				</div>
+
+			</div>
+
+			<div class="form-group">
+
+				<label for="ask-nicknameInput" class="col-sm-2 control-label">Nickname</label>
+				<div class="col-sm-9">
+					<input id="ask-nicknameInput" class="form-control" type="text" placeholder="Nickname">
+				</div>
+
+			</div>
+
+			<div class="form-group">
+
+				<label for="ask-passwordInput" class="col-sm-2 control-label">Password</label>
+				<div class="col-sm-9">
+					<input id="ask-passwordInput" class="form-control" type="password">
+				</div>
+
+			</div>
+
+			<div class="form-group">
+
+				<label for="ask-confirmPasswordInput" class="col-sm-2 control-label">Confirm password</label>
+				<div class="col-sm-9">
+					<input id="ask-confirmPasswordInput" class="form-control" type="password">
+				</div>
+
+			</div>
+
+			<div class="form-group">
+
+				<label for="ask-avatarInput" class="col-sm-2 control-label">Avatar</label>
+				<div class="col-sm-9">
+					<input id="ask-avatarInput" type="file" class="form-control-file">
+				</div>
+
+			</div>
+
+			<div class="form-group">
+
+				<div class="col-sm-7 col-sm-offset-2">
+					<button type="submit" class="btn btn-default">Register</button>
+				</div>
+
+			</div>
+
+		</div> <!-- form-horizontal end -->
+
+	</form>
+
+</div>
+{% endblock %}

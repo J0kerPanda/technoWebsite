@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extraCSS %}<link rel="stylesheet" href="{% static "css/login.css" %}"> {% endblock %}
+
+{% block customContent %}
+<div class="container-fluid">
+
+	<h2>Login</h2>
+
+	<h4 class="text-danger">This message indicates an error</h4>
+
+	<form class="col-md-10 ask-loginFormContainer">
+
+		<div class="form-horizontal">
+
+			<div class="form-group">
+
+				<label for="ask-loginInput" class="col-sm-2 control-label">Login</label>
+				<div class="col-sm-9">
+					<input id="ask-loginInput" class="form-control" type="text" placeholder="Login">
+				</div>
+
+			</div>
+
+			<div class="form-group">
+
+				<label for="ask-passwordInput" class="col-sm-2 control-label">Password</label>
+				<div class="col-sm-9">
+					<input id="ask-passwordInput" class="form-control" type="password" placeholder="Password">
+				</div>
+
+			</div>
+
+			<div class="form-group">
+
+				<div class="col-sm-7 col-sm-offset-2">
+					<button type="submit" class="btn btn-default">Log in</button>
+				</div>
+			</div>
+
+			<div class="form-group">
+			
+				<div class="col-sm-7 col-sm-offset-2">
+					<a class="ask-createAccountLink" href="#">Create new account</a>
+				</div>
+			</div>
+
+		</div> <!-- form-horizontal end -->
+
+	</form>
+	
+</div>
+{% endblock %}

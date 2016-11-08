@@ -14,6 +14,7 @@ class User:
 class Question:
 
 	def __init__( self, caption, text, answersCount ):
+		self.id = int( caption )
 		self.caption = caption
 		self.rating = 5
 		self.text = text
@@ -27,30 +28,39 @@ class Answer:
 		self.rating = 10
 		self.text = text
 
+def makeBase():
+
+	hotTags = []
+	bestMembers = []
+
+	for i in range( 10 ):
+			hotTags.append( str( i ) )
+
+	for i in range( 10 ):
+		bestMembers.append( str( i ) )
+
+	return {
+
+		'user': User( 'Antony', True ),
+		'hotTags': hotTags,
+		'bestMembers': bestMembers,
+	}
+
+
 def mainPage( request ):
 
 	try:
 
-		hotTags = []
-		bestMembers = []
+		result = makeBase();
+		
 		questions = []
 
 		for i in range( 10 ):
-			hotTags.append( str( i ) )
-
-		for i in range( 10 ):
-			bestMembers.append( str( i ) )
-
-		for i in range( 10 ):
 			questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
-		
-		return render( request, 'index.html', {
 
-			'user': User( 'Antony', False ),
-			'questions': questions,
-			'hotTags': hotTags,
-			'bestMembers': bestMembers,
-			})
+		result[ 'questions' ] = questions
+		
+		return render( request, 'index.html', result )
 	except:
 		raise Http404('Something went horribly wrong')
 
@@ -58,26 +68,16 @@ def hotQuestions( request ):
 
 	try:
 
-		hotTags = []
-		bestMembers = []
+		result = makeBase();
+		
 		questions = []
 
 		for i in range( 10 ):
-			hotTags.append( str( i ) )
-
-		for i in range( 10 ):
-			bestMembers.append( str( i ) )
-
-		for i in range( 10 ):
 			questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
-		
-		return render( request, 'index.html', {
 
-			'user': User( 'Antony', False ),
-			'questions': questions,
-			'hotTags': hotTags,
-			'bestMembers': bestMembers,
-			})
+		result[ 'questions' ] = questions
+		
+		return render( request, 'hotquestions.html', result )
 	except:
 		raise Http404('Something went horribly wrong')
 
@@ -85,66 +85,48 @@ def taggedQuestions( request, tag=None ):
 
 	try:
 
-		hotTags = []
-		bestMembers = []
+		result = makeBase();
+		
 		questions = []
 
 		for i in range( 10 ):
-			hotTags.append( str( i ) )
-
-		for i in range( 10 ):
-			bestMembers.append( str( i ) )
-
-		for i in range( 10 ):
 			questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
+
+		result[ 'questions' ] = questions
+		result[ 'tag' ] = tag
 		
-		return render( request, 'questiontags.html', {
-
-			'user': User( 'Antony', False ),
-			'questions': questions,
-			'hotTags': hotTags,
-			'bestMembers': bestMembers,
-			'tag': tag,
-			})
-
+		return render( request, 'questiontags.html', result )
 	except:
 		raise Http404('Something went horribly wrong')
 
 def answer( request, questionID=None ):
 
-	hotTags = []
-	bestMembers = []
-	answers = []
+	try:
 
-	for i in range( 10 ):
-		hotTags.append( str( i ) )
+		result = makeBase()
+		
+		answers = []
 
-	for i in range( 10 ):
-		bestMembers.append( str( i ) )
+		for i in range( 10 ):
+			answers.append( Answer( str( i ), ( str( i ) + " " ) * 150 ) )
 
-	for i in range( 10 ):
-		answers.append( Answer( str( i ), ( str( i ) + " " ) * 150 ) )
+		question = Question( 'THIS IS SINGLE QUESTION ' + str( questionID ), 'a ' * 200, 0 )
+		question.tags = [ 'Work', 'on', 'this' ]
 
-	question = Question( 'THIS IS SINGLE QUESTION ' + str( questionID ), 'a ' * 200, 0 )
-	question.tags = [ 'Work', 'on', 'this' ]
+		result[ 'answers' ] = answers
+		result[ 'question' ] = question
 	
-	return render( request, 'answer.html', {
-
-		'user': User( 'Antony', True ),
-		'question': question,
-		'answers' : answers,
-		'hotTags': hotTags,
-		'bestMembers': bestMembers,
-		})
+		return render( request, 'answer.html', result )
+	except:
+		raise Http404('Something went horribly wrong')
 
 def login( request ):
 
 	try:
 
-		data = "login here!\n"
+		result = makeBase()
 		
-		return HttpResponse( data, content_type='text/plain' )
-
+		return render( request, 'login.html', result )
 	except:
 		raise Http404('Something went horribly wrong')
 
@@ -152,10 +134,9 @@ def signup( request ):
 
 	try:
 
-		data = "signup here!\n"
+		result = makeBase()
 		
-		return HttpResponse( data, content_type='text/plain' )
-
+		return render( request, 'signup.html', result )
 	except:
 		raise Http404('Something went horribly wrong')
 
@@ -163,10 +144,9 @@ def ask( request ):
 
 	try:
 
-		data = "makeQuestion here!\n"
+		result = makeBase()
 		
-		return HttpResponse( data, content_type='text/plain' )
-
+		return render( request, 'ask.html', result )
 	except:
 		raise Http404('Something went horribly wrong')
 
