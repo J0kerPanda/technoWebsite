@@ -1,0 +1,44 @@
+{% load static %}
+
+<div class="well well-sm ask-container">
+				
+	<div class="media">
+		
+		<div class="media-left ask-answerUserBlock">
+
+			<a href="#">
+				<img class="media-object img-circle" src="{% static "img/dummy.png" %}">
+			</a>
+
+			<div class="ask-answerRatingBlock">
+
+				<div class="well pull-left text-right ask-answerRatingField">
+					{{ answer.rating }}
+				</div>
+				
+				<div class="btn-group-vertical pull-left ask-answerRatingButtonsGroup" role="group">
+						<button type="button" class="btn ask-ratingButton ask-ratingUpButton"></button>
+						<button type="button" class="btn ask-ratingButton ask-ratingDownButton"></button>
+				</div>
+
+			</div>
+
+		</div> <!-- end of userBlock -->
+
+		<div class="media-right ask-answerAnswerBlock">
+
+			<div><p>{{ question.text }}</p></div><br>
+
+			<div class="ask-answerBottomLine">
+
+				<div class="checkbox">
+				  <label>Correct!<input type="checkbox" value=""></label>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div> <!-- answer end -->

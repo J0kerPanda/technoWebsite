@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extraCSS %}<link rel="stylesheet" href="{% static "css/answer.css" %}"> {% endblock %}
+
+{% block customContent %}
+<div class="container-fluid">
+
+	<div class="container-fluid col-md-11 ask-container ask-bottomBordered">
+
+		<div class="media">
+						
+			<div class="media-left ask-questionUserBlock">
+
+				<a href="#">
+					<img class="media-object img-circle" src="{% static "img/dummy.png" %}">
+				</a>
+
+				<div class="ask-questionRatingBlock">
+
+					<div class="well pull-left text-right ask-questionRatingField">
+						{{ question.rating }}
+					</div>
+					
+					<div class="btn-group-vertical pull-left ask-questionRatingButtonsGroup" role="group">
+							<button type="button" class="btn ask-ratingButton ask-ratingUpButton"></button>
+							<button type="button" class="btn ask-ratingButton ask-ratingDownButton"></button>
+					</div>
+
+				</div>
+
+			</div> <!-- end of userBlock -->
+
+			<div class="media-right ask-questionQuestionBlock">
+				<h2 class="ask-questionCaption"><a href="#"> {{ question.caption|title }}</a></h2>
+
+				<div><p>{{ question.text }}</p></div><br>
+
+				<div class="ask-questionBottomLine">
+					<span class="lead ask-questionTags">
+						Tags:
+						{% for tag in question.tags %}
+						<a href="#">{{ tag }}</a>
+						{% endfor %}
+					</span>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div> <!-- end of question -->
+
+	<div class="container-fluid col-md-11 ask-container ask-bottomBordered">
+
+		{% for answer in answers %}
+
+			{% include "singleanswer.html" %}
+
+		{% endfor %}
+						
+	</div> <!-- answers list end -->
+
+	<div class="container-fluid col-md-11 ask-formContainer">
+
+		<form>
+
+			<div class="form-group">
+
+					<textarea id="ask-answerTextInput" class="form-control" type="text" rows="7" placeholder="Place your answer here"></textarea>
+
+			</div>
+
+			<button type="submit" class="btn btn-default">Answer!</button>
+
+		</form>
+	</div>
+
+</div>
+{% endblock %}

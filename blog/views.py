@@ -20,6 +20,13 @@ class Question:
 		self.tags = [ str( caption ), str( caption ), str( caption ) ]
 		self.answersCount = answersCount
 
+class Answer:
+
+	def __init__( self, caption, text ):
+		self.caption = caption
+		self.rating = 10
+		self.text = text
+
 def mainPage( request ):
 
 	try:
@@ -51,10 +58,26 @@ def hotQuestions( request ):
 
 	try:
 
-		data = "HotQuestions here!\n"
-		
-		return HttpResponse( data, content_type='text/plain' )
+		hotTags = []
+		bestMembers = []
+		questions = []
 
+		for i in range( 10 ):
+			hotTags.append( str( i ) )
+
+		for i in range( 10 ):
+			bestMembers.append( str( i ) )
+
+		for i in range( 10 ):
+			questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
+		
+		return render( request, 'index.html', {
+
+			'user': User( 'Antony', False ),
+			'questions': questions,
+			'hotTags': hotTags,
+			'bestMembers': bestMembers,
+			})
 	except:
 		raise Http404('Something went horribly wrong')
 
@@ -87,16 +110,32 @@ def taggedQuestions( request, tag=None ):
 	except:
 		raise Http404('Something went horribly wrong')
 
-def singleQuestion( request, questionID=None ):
+def answer( request, questionID=None ):
 
-	try:
+	hotTags = []
+	bestMembers = []
+	answers = []
 
-		data = "singleQuestion here!\n" + str( questionID ) + '\n'
-		
-		return HttpResponse( data, content_type='text/plain' )
+	for i in range( 10 ):
+		hotTags.append( str( i ) )
 
-	except:
-		raise Http404('Something went horribly wrong')
+	for i in range( 10 ):
+		bestMembers.append( str( i ) )
+
+	for i in range( 10 ):
+		answers.append( Answer( str( i ), ( str( i ) + " " ) * 150 ) )
+
+	question = Question( 'THIS IS SINGLE QUESTION ' + str( questionID ), 'a ' * 200, 0 )
+	question.tags = [ 'Work', 'on', 'this' ]
+	
+	return render( request, 'answer.html', {
+
+		'user': User( 'Antony', True ),
+		'question': question,
+		'answers' : answers,
+		'hotTags': hotTags,
+		'bestMembers': bestMembers,
+		})
 
 def login( request ):
 

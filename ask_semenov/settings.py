@@ -122,4 +122,4 @@ USE_TZ = True
 #Insert static variable here if needed
 
 STATIC_URL = '/'
-	
+AUTO_RENDER_SELECT2_STATICS = False
