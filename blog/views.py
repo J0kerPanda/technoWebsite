@@ -1,8 +1,9 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 from django.shortcuts import render
 
 from django.http import HttpResponse
 from django.http import HttpRequest
-
 from django.http import Http404
 
 class User:
@@ -46,23 +47,42 @@ def makeBase():
 		'bestMembers': bestMembers,
 	}
 
+def Paginate( request, container, pageCount ):
+
+	paginator = Paginator( container, pageCount )
+
+	pageNumber = request.GET.get( 'page' )
+
+	try:
+		page = paginator.page( pageNumber )
+
+	except PageNotAnInteger:
+		page = paginator.page( 1 )
+
+	except EmptyPage:
+		page = paginator.page( paginator.num_pages )
+
+	pageNumbers = []
+
+	for i in range( -2, 3 ):
+		if ( page.number + i ) in paginator.page_range:
+			pageNumbers.append( page.number + i )
+
+	return page, pageNumbers
+
 
 def mainPage( request ):
 
-	try:
+	result = makeBase();
+	
+	questions = []
 
-		result = makeBase();
-		
-		questions = []
+	for i in range( 40 ):
+		questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
 
-		for i in range( 10 ):
-			questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
-
-		result[ 'questions' ] = questions
-		
-		return render( request, 'index.html', result )
-	except:
-		raise Http404('Something went horribly wrong')
+	result[ 'questions' ], result[ 'pageNumbers' ] = Paginate( request, questions, 5 )
+	
+	return render( request, 'index.html', result )
 
 def hotQuestions( request ):
 
@@ -72,10 +92,10 @@ def hotQuestions( request ):
 		
 		questions = []
 
-		for i in range( 10 ):
+		for i in range( 40 ):
 			questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
 
-		result[ 'questions' ] = questions
+		result[ 'questions' ], result[ 'pageNumbers' ] = Paginate( request, questions, 5 )
 		
 		return render( request, 'hotquestions.html', result )
 	except:
@@ -89,10 +109,10 @@ def taggedQuestions( request, tag=None ):
 		
 		questions = []
 
-		for i in range( 10 ):
+		for i in range( 40 ):
 			questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
 
-		result[ 'questions' ] = questions
+		result[ 'questions' ], result[ 'pageNumbers' ] = Paginate( request, questions, 5 )
 		result[ 'tag' ] = tag
 		
 		return render( request, 'questiontags.html', result )
@@ -101,23 +121,24 @@ def taggedQuestions( request, tag=None ):
 
 def answer( request, questionID=None ):
 
+	try:
+		result = makeBase()
+		
+		answers = []
 
-	result = makeBase()
+		for i in range( 10 ):
+			answers.append( Answer( str( i ), ( str( i ) + " " ) * 150 ) )
+
+		question = Question( str( questionID ), 'a ' * 200, 0 )
+		question.tags = [ 'Work', 'on', 'this' ]
+
+		result[ 'answers' ] = answers
+		result[ 'question' ] = question
+
+		return render( request, 'answer.html', result )
+	except:
+		raise Http404('Something went horribly wrong')
 	
-	answers = []
-
-	for i in range( 10 ):
-		answers.append( Answer( str( i ), ( str( i ) + " " ) * 150 ) )
-
-	question = Question( str( questionID ), 'a ' * 200, 0 )
-	question.tags = [ 'Work', 'on', 'this' ]
-
-	result[ 'answers' ] = answers
-	result[ 'question' ] = question
-
-	return render( request, 'answer.html', result )
-	
-
 def login( request ):
 
 	try:

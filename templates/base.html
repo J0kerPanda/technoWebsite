@@ -26,10 +26,12 @@
 
 				<div class="collapse navbar-collapse">
 
-					<form class="navbar-form navbar-left" role="search">
+					{% url 'askQuestion' as askURL %}
+					<form class="navbar-form navbar-left" role="search" action="{{ askURL }}">
 						<div class="form-group">
 							<input id="ask-mainSearchField" class="form-control input-lg" type="text"  placeholder="Search">
 						</div>
+						
 						<button type="submit" class="btn btn-lg btn-default">Ask!</button>
 					</form>
 
