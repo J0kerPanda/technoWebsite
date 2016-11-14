@@ -122,5 +122,9 @@ USE_TZ = True
 
 #Insert static variable here if needed
 
-STATIC_URL = '/'
+STATICFILES_DIRS = [
+    os.path.join( BASE_DIR, "static" ),
+]
+
+STATIC_URL = '/static/'
 AUTO_RENDER_SELECT2_STATICS = False

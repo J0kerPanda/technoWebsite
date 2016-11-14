@@ -30,6 +30,7 @@ class Answer( models.Model ):
 		return self.text
 
 
-class Profile( User ):
+class Profile( models.Model ):
+	user = models.OneToOneField( User, null = False, blank = False )
 	image = models.ImageField( max_length=100 )
 	#create custom manager based on UserManager() ?

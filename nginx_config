@@ -48,7 +48,7 @@ http {
 
 		location ~ \.\w+$ {
 
-			root /home/anton/ask_semenov/static;
+			#root /home/anton/ask_semenov/static;
 			expires 1h;
 			add_header Cache-Control "public";
 		}

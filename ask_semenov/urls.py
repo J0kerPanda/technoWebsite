@@ -19,6 +19,7 @@ from django.contrib import admin
 from blog import views as blogViews
 
 urlpatterns = [
+    url(r'^admin/', admin.site.urls),
 	url(r'^$', blogViews.mainPage, name="mainPage"),
 	url(r'^hot/$', blogViews.hotQuestions, name="hotQuestions"),
 	url(r'^tag/(?P<tag>\w+)/$', blogViews.taggedQuestions, name="taggedQuestions"),
