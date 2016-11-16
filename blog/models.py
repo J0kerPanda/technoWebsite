@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User, UserManager
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 from datetime import datetime
 
@@ -28,11 +30,11 @@ class Tag( models.Model ):
 
 class QuestionManager( models.Manager ):
 	def rating_sorted( self ):
-		return super( QuestionManager, self ).order_by( '-rating', '-date' )
+		return super( QuestionManager, self ).order_by( '-rating', '-postDate' )
 
 
 	def date_sorted( self ):
-		return super( QuestionManager, self ).order_by( '-date', '-rating' )
+		return super( QuestionManager, self ).order_by( '-postDate', '-rating' )
 
 
 	def tagged_as_any( self, *requestedTags ):
@@ -56,13 +58,13 @@ class Question( models.Model ):
 	rating = models.IntegerField( null = False, default = 0 )
 	text = models.TextField( null = False, blank = False )
 	tags = models.ManyToManyField( 'Tag' )
-	postDate = models.DateField( null = False, blank = True, auto_now_add = True )
-	author = models.OneToOneField( 'Profile', null = False, blank = False )
+	postDate = models.DateTimeField( null = False, blank = True, auto_now_add = True )
+	author = models.ForeignKey( 'Profile', null = False, blank = False )
 	objects = QuestionManager()
 
 
 	def answersList( self ):
-		return self.answer_set.order_by( '-rating', 'correctFlag' )
+		return self.answer_set.order_by( '-correctFlag', '-rating' )
 
 
 	def __str__( self ):
@@ -97,7 +99,7 @@ class ProfileManager( models.Manager ):
 
 class Profile( models.Model ):
 	user = models.OneToOneField( User, null = False, blank = False, on_delete = models.CASCADE )
-	image = models.ImageField( max_length = 100 ) #set-default?
+	image = models.ImageField( null = True, blank = True, max_length = 100 )
 	rating = models.IntegerField( null = False, default = 0 )
 	objects = ProfileManager()
 
@@ -111,7 +113,19 @@ class Profile( models.Model ):
 		verbose_name_plural = "Профили"
 
 
-class Like( models.Model ):
+class Vote( models.Model ):
 
 	user = models.ForeignKey( 'Profile', null = False, blank = False )
-	isPositive = models.BooleanField( null = False, blank = False, default = true )
+	isPositive = models.BooleanField( null = False, blank = False, default = True )
+	related_type = models.ForeignKey( ContentType, on_delete = models.CASCADE )
+	related_id = models.PositiveIntegerField()
+	related_object = GenericForeignKey( 'related_type', 'related_id' )
+
+
+	def __str__( self ):
+		return str( self.user ) + " " + str( self.isPositive ) + ": " + str( self.related_object )
+
+
+	class Meta:
+		verbose_name = "Лайк/Дизлайк"
+		verbose_name_plural = "Лайки/Дизлайки"
