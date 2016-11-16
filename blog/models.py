@@ -20,7 +20,7 @@ class Tag( models.Model ):
 
 
 	def __str__( self ):
-		return self.caption
+		return str( self.caption )
 
 
 	class Meta:
@@ -39,7 +39,7 @@ class QuestionManager( models.Manager ):
 
 	def tagged_as_any( self, *requestedTags ):
 		rtList = list( requestedTags )
-		return super( QuestionManager, self ).filter( tags__in = rtList ).distinct().order_by( '-rating' )
+		return super( QuestionManager, self ).filter( tags__caption__in = rtList ).distinct().order_by( '-rating' )
 
 
 	def tagged_as_strict( self, *requestedTags ):
@@ -47,7 +47,7 @@ class QuestionManager( models.Manager ):
 		result = self.tagged_as_any( *requestedTags )
 
 		for requestedTag in requestedTags:
-			result = result.filter( tags__id = requestedTag.id )
+			result = result.filter( tags__caption = requestedTag )
 
 		result.order_by( '-rating' )
 		return result
@@ -64,11 +64,14 @@ class Question( models.Model ):
 
 
 	def answersList( self ):
-		return self.answer_set.order_by( '-correctFlag', '-rating' )
+		return self.answer_set.order_by( '-correct', '-rating' )
+
+	def answersCount( self ):
+		return self.answer_set.count()
 
 
 	def __str__( self ):
-		return self.caption + " " + self.text + ": " + str( self.rating )
+		return str( self.caption ) + " " + str( self.text ) + ": " + str( self.rating )
 
 
 	class Meta:
@@ -79,12 +82,12 @@ class Question( models.Model ):
 class Answer( models.Model ):
 	rating = models.IntegerField( null = False, default = 0 )
 	text = models.TextField( null = False, blank = False )
-	correctFlag = models.BooleanField( null = False, blank = False, default = False )
+	correct = models.BooleanField( null = False, blank = False, default = False )
 	question = models.ForeignKey( 'Question', null = False, blank = False, on_delete = models.CASCADE )
 
 
 	def __str__( self ):
-		return self.text
+		return str( self.text )
 
 
 	class Meta:
@@ -96,6 +99,9 @@ class ProfileManager( models.Manager ):
 	def rating_sorted( self ):
 		return super( ProfileManager, self ).order_by( '-rating' )
 
+	def get_by_username( self, name ):
+		return super( ProfileManager, self ).get( user__username=name )
+
 
 class Profile( models.Model ):
 	user = models.OneToOneField( User, null = False, blank = False, on_delete = models.CASCADE )
@@ -103,9 +109,12 @@ class Profile( models.Model ):
 	rating = models.IntegerField( null = False, default = 0 )
 	objects = ProfileManager()
 
+	def username( self ):
+		return str( self.user.username )
+
 
 	def __str__( self ):
-		return self.user.username
+		return self.username()
 
 
 	class Meta:

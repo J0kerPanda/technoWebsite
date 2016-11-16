@@ -40,10 +40,10 @@
 				<div class="ask-questionBottomLine">
 					<span class="lead ask-questionTags">
 						Tags:
-						{% for tag in question.tags %}
-						{% url 'taggedQuestions' tag as taggedQuestionsURL %}
+					{% for tag in question.tags.all %}
+					{% url 'taggedQuestions' tag as taggedQuestionsURL %}
 						<a href="{{ taggedQuestionsURL }}">{{ tag }}</a>
-						{% endfor %}
+					{% endfor %}
 					</span>
 				</div>
 
@@ -54,25 +54,18 @@
 	</div> <!-- end of question -->
 
 	<div class="container-fluid col-md-11 ask-container ask-bottomBordered">
-
-		{% for answer in answers %}
-
-			{% include "singleanswer.html" %}
-
-		{% endfor %}
-						
+	{% for answer in question.answersList %}
+	{% include "singleanswer.html" %}
+	{% endfor %}					
 	</div> <!-- answers list end -->
 
 	<div class="container-fluid col-md-11 ask-formContainer">
-
 		<form>
 
 			<div class="form-group">
 
 					<textarea id="ask-answerTextInput" class="form-control" type="text" rows="7" placeholder="Place your answer here"></textarea>
-
 			</div>
-
 			<button type="submit" class="btn btn-default">Answer!</button>
 
 		</form>

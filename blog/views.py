@@ -1,60 +1,24 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from django.http import HttpResponse
 from django.http import HttpRequest
+from django.http import Http404
 
-class User:
-
-	def __init__( self, name, loginStatus ):
-		self.name = name
-		self.loggedIn = loginStatus
-
-
-class Question:
-
-	def __init__( self, caption, text, answersCount ):
-		self.id = int( caption )
-		self.caption = caption
-		self.rating = 5
-		self.text = text
-		self.tags = [ str( caption ), str( caption ), str( caption ) ]
-		self.answersCount = answersCount
-
-
-class Answer:
-
-	def __init__( self, caption, text ):
-		self.caption = caption
-		self.rating = 10
-		self.text = text
-
+from blog.models import Tag, Question, Answer, Profile, Vote
 
 def makeBase():
-
-	hotTags = []
-	bestMembers = []
-
-	for i in range( 10 ):
-			hotTags.append( str( i ) )
-
-	for i in range( 10 ):
-		bestMembers.append( str( i ) )
-
 	return {
 
-		'user': User( 'Antony', False ),
-		'hotTags': hotTags,
-		'bestMembers': bestMembers,
+		'profile': Profile.objects.get_by_username( 'User1' ),
+		'hotTags': Tag.objects.rating_sorted()[:10],
+		'bestMembers': Profile.objects.rating_sorted()[:10],
 	}
 
 
-def Paginate( request, container, pageCount ):
-
-	paginator = Paginator( container, pageCount )
-
-	pageNumber = request.GET.get( 'page' )
+def Paginate( request, container, perPage ):
+	paginator = Paginator( container, perPage )
+	pageNumber = request.GET.get( 'page' ) #gets page from get parameters
 
 	try:
 		page = paginator.page( pageNumber )
@@ -75,80 +39,45 @@ def Paginate( request, container, pageCount ):
 
 
 def mainPage( request ):
-
-	result = makeBase();
-	
-	questions = []
-
-	for i in range( 40 ):
-		questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
-
+	result = makeBase()
+	questions = Question.objects.rating_sorted()
 	result[ 'questions' ], result[ 'pageNumbers' ] = Paginate( request, questions, 5 )
-	
 	return render( request, 'index.html', result )
 
 
 def hotQuestions( request ):
-
 	result = makeBase();
-	
-	questions = []
-
-	for i in range( 40 ):
-		questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
-
+	questions = Question.objects.date_sorted()
 	result[ 'questions' ], result[ 'pageNumbers' ] = Paginate( request, questions, 5 )
-	
 	return render( request, 'hotquestions.html', result )
 
+
 def taggedQuestions( request, tag=None ):
-
 	result = makeBase();
-	
-	questions = []
-
-	for i in range( 40 ):
-		questions.append( Question( str( i ), ( str( i ) + " " ) * 200 , i ) )
-
+	questions = Question.objects.tagged_as_strict( tag )
 	result[ 'questions' ], result[ 'pageNumbers' ] = Paginate( request, questions, 5 )
 	result[ 'tag' ] = tag
-	
 	return render( request, 'questiontags.html', result )
 
+
 def answer( request, questionID=None ):
-
 	result = makeBase()
-	
-	answers = []
-
-	for i in range( 10 ):
-		answers.append( Answer( str( i ), ( str( i ) + " " ) * 150 ) )
-
-	question = Question( str( questionID ), 'a ' * 200, 0 )
-	question.tags = [ 'Work', 'on', 'this' ]
-
-	result[ 'answers' ] = answers
-	result[ 'question' ] = question
-
+	result[ 'question' ] = get_object_or_404( Question, id = questionID )
 	return render( request, 'answer.html', result )
 	
-def login( request ):
 
+def login( request ):
 	result = makeBase()
-	
 	return render( request, 'login.html', result )
 
-def signup( request ):
 
+def signup( request ):
 	result = makeBase()
-	
 	return render( request, 'signup.html', result )
 
 
 def ask( request ):
-
 	result = makeBase()
-	
 	return render( request, 'ask.html', result )
 
 

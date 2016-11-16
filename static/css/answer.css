@@ -144,7 +144,7 @@
 .ask-answerBottomLine > .checkbox {
 
 	margin: 0px;
-	font-size: 15px;
+	font-size: 20px;
 }
 
 .ask-answerBottomLine > .checkbox > label {
@@ -157,5 +157,7 @@
 	position: relative;
 
 	margin-left: 10px;
+	top: 2.5px;
+	left: -3px;
 }
 

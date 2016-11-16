@@ -36,10 +36,10 @@
 				<a class="lead" href="{{ questionURL }}">Answer ({{ question.answersCount }})</a> 
 				<span class="lead pull-right ask-questionListElementTags">
 					Tags:
-					{% for tag in question.tags %}
-					{% url 'taggedQuestions' tag as taggedQuestionsUrl %}
+				{% for tag in question.tags.all %}
+				{% url 'taggedQuestions' tag as taggedQuestionsUrl %}
 					<a href="{{ taggedQuestionsUrl }}">{{ tag }}</a>
-					{% endfor %}
+				{% endfor %}
 				</span>
 			</div>
 

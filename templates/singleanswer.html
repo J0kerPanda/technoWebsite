@@ -28,11 +28,10 @@
 		<div class="media-right ask-answerAnswerBlock">
 
 			<div><p>{{ answer.text }}</p></div><br>
-
 			<div class="ask-answerBottomLine">
 
 				<div class="checkbox">
-				  <label>Correct!<input type="checkbox" value=""></label>
+				  <label>Correct!<input type="checkbox" value="" {% if answer.correct %}checked{% endif %}></label>
 				</div>
 
 			</div>
@@ -40,5 +39,4 @@
 		</div>
 
 	</div>
-
 </div> <!-- answer end -->

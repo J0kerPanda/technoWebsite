@@ -10,7 +10,6 @@
 	</head>
 
 	<body>
-
 		<nav class="navbar navbar-default ask-navbar">
 			<div class="container-fluid">
 				<div class="navbar-header col-md-3">
@@ -31,12 +30,10 @@
 						<div class="form-group">
 							<input id="ask-mainSearchField" class="form-control input-lg" type="text"  placeholder="Search">
 						</div>
-						
 						<button type="submit" class="btn btn-lg btn-default">Ask!</button>
 					</form>
 
-					{% if user.loggedIn %}
-
+				{% if profile %}
 					<ul class="nav navbar-nav navbar-right">
 
 						<li class="pull-right">
@@ -49,7 +46,7 @@
 								</div>
 
 								<div class="media-right">
-									<h4> {{ user.name }}</h4>
+									<h4> {{ profile.username }}</h4>
 									<div>
 										<a href="#">Settings</a>
 										<a href="#">Log out</a>
@@ -61,8 +58,7 @@
 
 					</ul>
 
-					{% else %}
-
+				{% else %}
 					<ul class="nav navbar-nav navbar-right ask-navbarLoginSection">
 
 						<li>
@@ -76,10 +72,8 @@
 						</li>
 
 					</ul>
+				{% endif %}
 
-					{% endif %}
-
-					
 				</div> <!-- end of navbar-collapse -->
 			</div> <!-- end of container-fluid -->
 		</nav>
@@ -87,11 +81,8 @@
 		<div class="row">
 				
 			<div class="container col-md-9"> <!-- insert page custom content here-->
-
 			{% block customContentCaption %} {% endblock %}
-
 			{% block customContent %}{% endblock %}
-
 			</div> <!-- custom content end -->
 
 			<div class="col-md-3 ask-rightColumn">
@@ -101,9 +92,8 @@
 					<div class="ask-popularTags">
 						
 					{% for tag in hotTags %}
-						{% url 'taggedQuestions' tag as taggedQuestionsURL %}
-						<a href="{{ taggedQuestionsURL }}">{{ tag|title }}</a>
-						
+					{% url 'taggedQuestions' tag as taggedQuestionsURL %}
+						<a href="{{ taggedQuestionsURL }}">{{ tag.caption|title }}</a>	
 					{% endfor %}
 
 					</div>
@@ -114,7 +104,7 @@
 					<ul class="list-unstyled ask-bestMembers">
 						
 					{% for member in bestMembers %}
-						<li><a href="#">{{ member }}</a></li>
+						<li><a href="#">{{ member.username }}</a></li>
 					{% endfor %}
 
 					</ul>
@@ -122,7 +112,5 @@
 			</div>
 
 		</div> <!-- row end -->
-
 	</body>
-
 </html>
