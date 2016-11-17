@@ -16,6 +16,12 @@
 	padding: 9px;
 }
 
+.ask-questionProfileImage {
+
+	width: 64px;
+	height: 64px;
+}
+
 .ask-questionRatingBlock {
 
 	margin-top: 3px;

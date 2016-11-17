@@ -10,7 +10,7 @@ class Command( BaseCommand ):
 
 	def add_arguments( self, parser ):
 		parser.add_argument( 
-			'--q',
+			'-q',
 			type = int, 
 			action = 'store',
 			dest = 'questionsCount',
@@ -18,7 +18,7 @@ class Command( BaseCommand ):
 			help = 'Number of questions' )
 
 		parser.add_argument( 
-			'--p',
+			'-p',
 			type = int,  
 			action = 'store',
 			dest = 'profilesCount',
@@ -26,20 +26,25 @@ class Command( BaseCommand ):
 			help = 'Number of profiles' )
 
 		parser.add_argument( 
-			'--t',
+			'-t',
 			type = int,  
 			action = 'store',
 			dest = 'tagsCount',
 			default = 20,
 			help = 'Number of questions' )
 
+	def randomBoolean( self ):
+		return ( random.randint( 0, 2 ) > 0 )
 
 	def addProfile( self, userNumber ):
 		newUser = User.objects.create( 
 			username = 'User' + str( userNumber ), 
 			email = 'user' + str( userNumber ) + '@user.com' )
 		newUser.save()
-		newProfile = Profile.objects.create( user = newUser, rating = random.randint( -100, 100 ) )
+		newProfile = Profile.objects.create( 
+			user = newUser, 
+			rating = random.randint( -100, 100 ) )
+		newProfile.image.name = 'user' + str( ( newProfile.id % 5 ) + 1 ) + '.png'
 		newProfile.save()
 
 
@@ -50,29 +55,22 @@ class Command( BaseCommand ):
 
 	def generateLikes( self, relatedObject ):
 		for profile in Profile.objects.all():
+			if self.randomBoolean():
+				if self.randomBoolean():
+					newVote = Vote.objects.create( profile = profile, is_positive = True, related_object = relatedObject )
 
-			if random.randint( 0, 1 ):
-				relatedObject.rating = relatedObject.rating + 1
-				newVote = Vote.objects.create( profile = profile, is_positive = True, related_object = relatedObject )
-
-			else:
-				relatedObject.rating = relatedObject.rating - 1
-				newVote = Vote.objects.create( profile = profile, is_positive = False, related_object = relatedObject )
-
-			newVote.save()
+				else:
+					newVote = Vote.objects.create( profile = profile, is_positive = False, related_object = relatedObject )
 
 
-	def addAnswer( self, question, answerNumber ):
+	def addAnswer( self, question, author, answerNumber ):
 		newAnswer = Answer.objects.create( 
 			text = ( 'Answer' + str ( answerNumber ) + ' ' ) * 5,
-			question = question )
+			question = question,
+			correct = self.randomBoolean(),
+			author = author )
 		newAnswer.save()
-
-		if random.randint( 0, 1 ):
-			newAnswer.correct = True
-
 		self.generateLikes( newAnswer )
-		newAnswer.save()
 
 
 	def addQuestion( self, author, questionNumber ):
@@ -83,7 +81,7 @@ class Command( BaseCommand ):
 		newQuestion.save()
 
 		for tag in Tag.objects.all():
-			if random.randint( 0, 1 ):
+			if self.randomBoolean():
 				newQuestion.tags.add( tag )
 
 			if ( newQuestion.tags.count() == 5 ):
@@ -91,10 +89,11 @@ class Command( BaseCommand ):
 
 		limit = random.randint( 2, 6 )
 		for i in range( 0, limit ):
-			self.addAnswer( newQuestion, i )
+			index = random.randint( 0, Profile.objects.count() - 1 )
+			answerAuthor = Profile.objects.all()[ index ]
+			self.addAnswer( newQuestion, answerAuthor, i )
 
 		self.generateLikes( newQuestion )
-		newQuestion.save()
 
 
 	def handle( self, *args, **options ):

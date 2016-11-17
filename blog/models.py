@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 from datetime import datetime
 
 
@@ -85,6 +88,7 @@ class Answer( models.Model ):
 	text = models.TextField( null = False, blank = False )
 	correct = models.BooleanField( null = False, blank = False, default = False )
 	question = models.ForeignKey( 'Question', null = False, blank = False, on_delete = models.CASCADE )
+	author = models.ForeignKey( 'Profile', null = False, blank = False, on_delete = models.CASCADE )
 
 
 	def __str__( self ):
@@ -128,7 +132,7 @@ class Vote( models.Model ):
 	profile = models.ForeignKey( 'Profile', null = False, blank = False, on_delete = models.CASCADE )
 	is_positive = models.BooleanField( null = False, blank = False, default = True )
 	related_type = models.ForeignKey( ContentType )
-	related_id = models.PositiveIntegerField()
+	related_id = models.PositiveIntegerField( null = False )
 	related_object = GenericForeignKey( 'related_type', 'related_id' )
 
 
@@ -136,6 +140,18 @@ class Vote( models.Model ):
 		return str( self.profile ) + " " + str( self.is_positive ) + ": " + str( self.related_object )
 
 
+	def save( self, *args, **kwargs ):
+		if self.is_positive:
+			self.related_object.rating += 1
+		else:
+			self.related_object.rating -= 1
+
+		self.related_object.save()
+		super( Vote, self ).save( *args, **kwargs )
+
+
 	class Meta:
 		verbose_name = "Лайк/Дизлайк"
 		verbose_name_plural = "Лайки/Дизлайки"
+
+	

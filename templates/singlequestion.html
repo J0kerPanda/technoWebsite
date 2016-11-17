@@ -1,13 +1,12 @@
 {% load static %}
 
 <div class="well well-sm ask-questionListElement">
-		
 	<div class="media">
 		
 		<div class="media-left ask-questionListElementUserBlock">
 
 			<a href="#">
-				<img class="media-object img-circle" src="{% static "img/dummy.png" %}">
+				<img class="media-object img-circle ask-questionProfileImage" src="/uploads/{{ question.author.image.url }}">
 			</a>
 
 			<div class="ask-questionRatingBlock">
@@ -46,5 +45,4 @@
 		</div>
 
 	</div>
-
 </div> <!-- questionsListElement end -->

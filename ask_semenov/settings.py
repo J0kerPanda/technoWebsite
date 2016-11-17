@@ -123,8 +123,10 @@ USE_TZ = True
 #Insert static variable here if needed
 
 STATICFILES_DIRS = [
-    os.path.join( BASE_DIR, "static" ),
+    os.path.join( BASE_DIR, 'static' ),
 ]
+
+MEDIA_ROOT = os.path.join( BASE_DIR, 'uploads' ),
 
 STATIC_URL = '/static/'
 AUTO_RENDER_SELECT2_STATICS = False
