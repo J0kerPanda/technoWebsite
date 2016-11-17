@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.contrib.auth.models import User, UserManager
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
@@ -59,19 +59,20 @@ class Question( models.Model ):
 	text = models.TextField( null = False, blank = False )
 	tags = models.ManyToManyField( 'Tag' )
 	postDate = models.DateTimeField( null = False, blank = True, auto_now_add = True )
-	author = models.ForeignKey( 'Profile', null = False, blank = False )
+	author = models.ForeignKey( 'Profile', null = False, blank = False, on_delete = models.CASCADE )
 	objects = QuestionManager()
 
 
 	def answersList( self ):
 		return self.answer_set.order_by( '-correct', '-rating' )
 
+
 	def answersCount( self ):
 		return self.answer_set.count()
 
 
 	def __str__( self ):
-		return str( self.caption ) + " " + str( self.text ) + ": " + str( self.rating )
+		return str( self.author ) + ": " + str( self.caption ) + ", " + str( self.rating )
 
 
 	class Meta:
@@ -87,8 +88,7 @@ class Answer( models.Model ):
 
 
 	def __str__( self ):
-		return str( self.text )
-
+		return str( self.question ) + ": " + str( self.text )[:10] + "..., " + str( self.rating )
 
 	class Meta:
 		verbose_name = "Ответ"
@@ -99,6 +99,7 @@ class ProfileManager( models.Manager ):
 	def rating_sorted( self ):
 		return super( ProfileManager, self ).order_by( '-rating' )
 
+
 	def get_by_username( self, name ):
 		return super( ProfileManager, self ).get( user__username=name )
 
@@ -108,6 +109,7 @@ class Profile( models.Model ):
 	image = models.ImageField( null = True, blank = True, max_length = 100 )
 	rating = models.IntegerField( null = False, default = 0 )
 	objects = ProfileManager()
+
 
 	def username( self ):
 		return str( self.user.username )
@@ -123,16 +125,15 @@ class Profile( models.Model ):
 
 
 class Vote( models.Model ):
-
-	user = models.ForeignKey( 'Profile', null = False, blank = False )
-	isPositive = models.BooleanField( null = False, blank = False, default = True )
-	related_type = models.ForeignKey( ContentType, on_delete = models.CASCADE )
+	profile = models.ForeignKey( 'Profile', null = False, blank = False, on_delete = models.CASCADE )
+	is_positive = models.BooleanField( null = False, blank = False, default = True )
+	related_type = models.ForeignKey( ContentType )
 	related_id = models.PositiveIntegerField()
 	related_object = GenericForeignKey( 'related_type', 'related_id' )
 
 
 	def __str__( self ):
-		return str( self.user ) + " " + str( self.isPositive ) + ": " + str( self.related_object )
+		return str( self.profile ) + " " + str( self.is_positive ) + ": " + str( self.related_object )
 
 
 	class Meta:
