@@ -39,15 +39,16 @@ def Paginate( request, container, perPage ):
 
 
 def mainPage( request ):
-	result = makeBase()
-	questions = Question.objects.rating_sorted()
+	result = makeBase();
+	questions = Question.objects.date_sorted()
 	result[ 'questions' ], result[ 'pageNumbers' ] = Paginate( request, questions, 5 )
 	return render( request, 'index.html', result )
+	
 
 
 def hotQuestions( request ):
-	result = makeBase();
-	questions = Question.objects.date_sorted()
+	result = makeBase()
+	questions = Question.objects.rating_sorted()
 	result[ 'questions' ], result[ 'pageNumbers' ] = Paginate( request, questions, 5 )
 	return render( request, 'hotquestions.html', result )
 

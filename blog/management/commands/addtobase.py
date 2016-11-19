@@ -8,6 +8,7 @@ from blog.models import Tag, Question, Answer, Profile, Vote
 class Command( BaseCommand ):
 	help = 'Adds test data to base'
 
+
 	def add_arguments( self, parser ):
 		parser.add_argument( 
 			'-q',
@@ -33,8 +34,10 @@ class Command( BaseCommand ):
 			default = 20,
 			help = 'Number of questions' )
 
+
 	def randomBoolean( self ):
 		return ( random.randint( 0, 2 ) > 0 )
+
 
 	def addProfile( self, userNumber ):
 		newUser = User.objects.create( 
@@ -80,12 +83,11 @@ class Command( BaseCommand ):
 			author = author )
 		newQuestion.save()
 
-		for tag in Tag.objects.all():
-			if self.randomBoolean():
+		while ( newQuestion.tags.count() < min( 5, Tag.objects.count() ) ):
+			index = random.randint( 0, Tag.objects.count() - 1 )
+			tag = Tag.objects.all()[ index ]
+			if ( tag not in newQuestion.tags.all() ):
 				newQuestion.tags.add( tag )
-
-			if ( newQuestion.tags.count() == 5 ):
-				break
 
 		limit = random.randint( 2, 6 )
 		for i in range( 0, limit ):
@@ -97,17 +99,17 @@ class Command( BaseCommand ):
 
 
 	def handle( self, *args, **options ):
-		for i in range( 1, options[ 'profilesCount' ] + 1 ):
+		for i in range( Profile.objects.count() + 1, Profile.objects.count() + options[ 'profilesCount' ] + 1 ):
 			self.addProfile( i )
 
 		self.stdout.write( self.style.SUCCESS( 'Profiles generated' ) )
 
-		for i in range( 1, options[ 'tagsCount' ] + 1 ):
+		for i in range( Tag.objects.count() + 1, Tag.objects.count() + options[ 'tagsCount' ] + 1 ):
 			self.addTag( i )
 
 		self.stdout.write( self.style.SUCCESS( 'Tags generated' ) )
 
-		for i in range( 1, options[ 'questionsCount' ] + 1 ):
+		for i in range( Question.objects.count() + 1, Question.objects.count() + options[ 'questionsCount' ] + 1 ):
 			index = random.randint( 0, Profile.objects.count() - 1 )
 			author = Profile.objects.all()[ index ]
 			self.addQuestion( author, i )
