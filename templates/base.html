@@ -48,7 +48,8 @@
 								<div class="media-right">
 									<h4> {{ profile.username }}</h4>
 									<div>
-										<a href="#">Settings</a>
+										{% url 'settings' as settingsURL %}
+										<a href="{{ settingsURL }}">Settings</a>
 										<a href="#">Log out</a>
 									</div>
 								</div>

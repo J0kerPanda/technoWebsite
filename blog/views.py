@@ -1,16 +1,20 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 
+from django.http import HttpResponseRedirect 
 from django.http import HttpResponse
 from django.http import HttpRequest
 from django.http import Http404
 
+from django.contrib.auth.models import User
 from blog.models import Tag, Question, Answer, Profile, Vote
+
+import blog_forms as blogForms
 
 def makeBase():
 	return {
 
-		'profile': Profile.objects.get_by_username( 'User1' ),
+		'profile': Profile.objects.get_by_username( '123' ),
 		'hotTags': Tag.objects.rating_sorted()[:10],
 		'bestMembers': Profile.objects.rating_sorted()[:10],
 	}
@@ -69,17 +73,73 @@ def answer( request, questionID=None ):
 
 def login( request ):
 	result = makeBase()
+
+	if ( request.method == 'POST' ):
+
+		form = blogForms.LoginForm( request.POST )
+
+	else:
+
+		form = blogForms.LoginForm()
+
+	result[ 'form' ] = form
 	return render( request, 'login.html', result )
 
 
 def signup( request ):
 	result = makeBase()
+
+	if ( request.method == 'POST' ):
+
+		form = blogForms.NewUserForm( request.POST, request.FILES )
+		
+		if ( form.is_valid() ):
+
+			newUser = User.objects.create( 
+			username = form.cleaned_data[ 'login' ], 
+			email = form.cleaned_data[ 'email' ],
+			password = form.cleaned_data[ 'password' ] )
+			newUser.save()
+			newProfile = Profile.objects.create( 
+				user = newUser, 
+				rating = 0 )
+
+			if ( form.cleaned_data[ 'avatar' ] ):
+				newProfile.image = form.cleaned_data[ 'avatar' ]
+			newProfile.save()
+
+			return HttpResponseRedirect( '/' )
+
+	else:
+
+		form = blogForms.NewUserForm()
+
+	result[ 'form' ] = form
 	return render( request, 'signup.html', result )
 
 
 def ask( request ):
 	result = makeBase()
 	return render( request, 'ask.html', result )
+
+def settings( request ):
+	result = makeBase()
+
+	if ( request.method == 'POST' ):
+
+		form = blogForms.ChangeSettingsForm( request.POST, request.FILES )
+
+	else:
+
+		form = blogForms.ChangeSettingsForm()
+
+	result[ 'form' ] = form
+	return render( request, 'settings.html', result )
+
+def logout( request ):
+
+	return HttpResponseRedirect( '/' )
+	
 
 
 

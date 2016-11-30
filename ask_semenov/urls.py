@@ -26,5 +26,6 @@ urlpatterns = [
 	url(r'^question/(?P<questionID>\d+)/$', blogViews.answer, name="answer"),
 	url(r'^login/$', blogViews.login, name="login"),
 	url(r'^signup/$', blogViews.signup, name="signup"),
-	url(r'^ask/$', blogViews.ask, name="askQuestion")
+	url(r'^ask/$', blogViews.ask, name="askQuestion"),
+	url(r'^settings/$', blogViews.settings, name="settings" ),
 ]

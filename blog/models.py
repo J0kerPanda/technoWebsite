@@ -110,7 +110,7 @@ class ProfileManager( models.Manager ):
 
 class Profile( models.Model ):
 	user = models.OneToOneField( User, null = False, blank = False, on_delete = models.CASCADE )
-	image = models.ImageField( null = True, blank = True, max_length = 100 )
+	image = models.ImageField( null = False, blank = True, upload_to = '', default = 'dummy.png', max_length = 100 )
 	rating = models.IntegerField( null = False, default = 0 )
 	objects = ProfileManager()
 
