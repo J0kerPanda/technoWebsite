@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block extraCSS %}<link rel="stylesheet" href="{% static "css/settings.css" %}"> {% endblock %}
+{% block extraCSS %}<link rel="stylesheet" href="{% static "css/register.css" %}"> {% endblock %}
 
 {% block customContent %}
 <div class="container-fluid">
@@ -13,65 +13,19 @@
 		{% csrf_token %}
 
 		{{ form.non_field_errors }}
-		<div class="form-group">
-
-			{{ form.login.errors }}
-			<label for="{{ form.login.id_for_label }}" class="col-sm-2 control-label"> {{ form.login.label }}</label>
-			<div class="col-sm-9">
-				<input id="{{ form.login.id_for_label }}" name="{{ form.login.name }}" class="form-control" type="text" placeholder="{{ form.login.help_text }}" {% if form.login.value %} value="{{ form.login.value }}" {% endif %} required>
-			</div>
-
-		</div>
+		{% for field in form %}
 
 		<div class="form-group">
 
-			{{ form.email.errors }}
-			<label for="{{ form.email.id_for_label }}" class="col-sm-2 control-label"> {{ form.email.label }}</label>
+			{{ field.errors }}
+			<label for="{{ field.id_for_label }}" class="col-sm-2 control-label"> {{ field.label }}</label>
 			<div class="col-sm-9">
-				<input id="{{ form.email.id_for_label }}" name="{{ form.email.name }}" class="form-control" type="email" placeholder="{{ form.email.help_text }}" {% if form.email.value %} value="{{ form.email.value }}" {% endif %} required>
+				{{ field }}
 			</div>
 
 		</div>
 
-		<div class="form-group">
-
-			{{ form.nickname.errors }}
-			<label for="{{ form.nickname.id_for_label }}" class="col-sm-2 control-label"> {{ form.nickname.label }}</label>
-			<div class="col-sm-9">
-				<input id="{{ form.nickname.id_for_label }}" name="{{ form.nickname.name }}" class="form-control" type="text" placeholder="{{ form.nickname.help_text }}" {% if form.nickname.value %} value="{{ form.nickname.value }}" {% endif %} required>
-			</div>
-
-		</div>
-
-		<div class="form-group">
-
-			{{ form.password.errors }}
-			<label for="{{ form.password.id_for_label }}" class="col-sm-2 control-label"> {{ form.password.label }}</label>
-			<div class="col-sm-9">
-				<input id="{{ form.password.id_for_label }}" name="{{ form.password.name }}" class="form-control" type="text" placeholder="{{ form.password.help_text }}" {% if form.password.value %} value="{{ form.password.value }}" {% endif %} required>
-			</div>
-
-		</div>
-
-		<div class="form-group">
-
-			{{ form.passwordConfirm.errors }}
-			<label for="{{ form.passwordConfirm.id_for_label }}" class="col-sm-2 control-label"> {{ form.passwordConfirm.label }}</label>
-			<div class="col-sm-9">
-				<input id="{{ form.passwordConfirm.id_for_label }}" name="{{ form.passwordConfirm.name }}" class="form-control" type="text" placeholder="{{ form.passwordConfirm.help_text }}" {% if form.passwordConfirm.value %} value="{{ form.passwordConfirm.value }}" {% endif %} required>
-			</div>
-
-		</div>
-
-		<div class="form-group">	
-
-			{{ form.avatar.errors }}
-			<label for="{{ form.avatar.id_for_label }}" class="col-sm-2 control-label"> {{ form.avatar.label }}</label>
-			<div class="col-sm-9">
-				<input id="{{ form.avatar.id_for_label }}" name="{{ form.avatar.name }}" class="form-control-file" type="file" >
-			</div>
-
-		</div>
+		{% endfor %}
 
 		<div class="form-group">
 		    <div class="col-sm-offset-2 col-sm-9">

@@ -11,13 +11,21 @@ from blog.models import Tag, Question, Answer, Profile, Vote
 
 import blog_forms as blogForms
 
-def makeBase():
-	return {
+def makeBase( request ):
 
-		'profile': Profile.objects.get_by_username( '123' ),
+	result = { 
 		'hotTags': Tag.objects.rating_sorted()[:10],
 		'bestMembers': Profile.objects.rating_sorted()[:10],
 	}
+
+	if ( request.user.is_authenticated ):
+		result[ 'profile' ] = Profile.objects.get_by_username( '123' )
+
+	else:
+		result[ 'profile' ] = None
+
+	return result
+		
 
 
 def Paginate( request, container, perPage ):
@@ -43,7 +51,7 @@ def Paginate( request, container, perPage ):
 
 
 def mainPage( request ):
-	result = makeBase();
+	result = makeBase( request );
 	questions = Question.objects.date_sorted()
 	result[ 'questions' ], result[ 'pageNumbers' ] = Paginate( request, questions, 5 )
 	return render( request, 'index.html', result )
@@ -51,14 +59,14 @@ def mainPage( request ):
 
 
 def hotQuestions( request ):
-	result = makeBase()
+	result = makeBase( request )
 	questions = Question.objects.rating_sorted()
 	result[ 'questions' ], result[ 'pageNumbers' ] = Paginate( request, questions, 5 )
 	return render( request, 'hotquestions.html', result )
 
 
 def taggedQuestions( request, tag=None ):
-	result = makeBase();
+	result = makeBase( request );
 	questions = Question.objects.tagged_as_strict( tag )
 	result[ 'questions' ], result[ 'pageNumbers' ] = Paginate( request, questions, 5 )
 	result[ 'tag' ] = tag
@@ -66,13 +74,13 @@ def taggedQuestions( request, tag=None ):
 
 
 def answer( request, questionID=None ):
-	result = makeBase()
+	result = makeBase( request )
 	result[ 'question' ] = get_object_or_404( Question, id = questionID )
 	return render( request, 'answer.html', result )
 	
 
 def login( request ):
-	result = makeBase()
+	result = makeBase( request )
 
 	if ( request.method == 'POST' ):
 
@@ -87,7 +95,7 @@ def login( request ):
 
 
 def signup( request ):
-	result = makeBase()
+	result = makeBase( request )
 
 	if ( request.method == 'POST' ):
 
@@ -119,11 +127,11 @@ def signup( request ):
 
 
 def ask( request ):
-	result = makeBase()
+	result = makeBase( request )
 	return render( request, 'ask.html', result )
 
 def settings( request ):
-	result = makeBase()
+	result = makeBase( request )
 
 	if ( request.method == 'POST' ):
 
@@ -137,6 +145,10 @@ def settings( request ):
 	return render( request, 'settings.html', result )
 
 def logout( request ):
+
+	if ( request.user.is_authenticated ):
+
+		return HttpResponseRedirect( '/' )
 
 	return HttpResponseRedirect( '/' )
 	

@@ -7,64 +7,28 @@
 {% block customContent %}
 <div class="container-fluid">
 
-	<h2>Settings: {{ profile.username }}</h2>
+	<h2>Settings: {{ profile.username }} </h2>
 
 	<form class="col-md-10 form-horizontal ask-settingsFormContainer" enctype="multipart/form-data" method="post">
 		{% csrf_token %}
 
 		{{ form.non_field_errors }}
+		{% for field in form %}
+
 		<div class="form-group">
 
-			{{ form.email.errors }}
-			<label for="{{ form.email.id_for_label }}" class="col-sm-2 control-label"> {{ form.email.label }}</label>
+			{{ field.errors }}
+			<label for="{{ field.id_for_label }}" class="col-sm-2 control-label"> {{ field.label }}</label>
 			<div class="col-sm-9">
-				<input id="{{ form.email.id_for_label }}" name="{{ form.email.name }}" class="form-control" type="email" placeholder="{{ form.email.help_text }}" {% if form.email.value %} value="{{ form.email.value }}" {% endif %}>
+				{% if field.label == "Avatar" %}
+				<img id="ask-currentProfilePicture" class="img-circle" src="{{ profile.image.url }}">
+				{% endif %}
+				{{ field }}
 			</div>
 
 		</div>
 
-		<div class="form-group">
-
-			{{ form.nickname.errors }}
-			<label for="{{ form.nickname.id_for_label }}" class="col-sm-2 control-label"> {{ form.nickname.label }}</label>
-			<div class="col-sm-9">
-				<input id="{{ form.nickname.id_for_label }}" name="{{ form.nickname.name }}" class="form-control" type="text" placeholder="{{ form.nickname.help_text }}" {% if form.nickname.value %} value="{{ form.nickname.value }}" {% endif %}>
-			</div>
-
-		</div>
-
-		<div class="form-group">
-
-			{{ form.password.errors }}
-			<label for="{{ form.password.id_for_label }}" class="col-sm-2 control-label"> {{ form.password.label }}</label>
-			<!--<div class="col-sm-9">
-				<input id="{{ form.password.id_for_label }}" name="{{ form.password.name }}" class="form-control" placeholder="{{ form.password.help_text }}" {% if form.password.value %} value="{{ form.password.value }}" {% endif %}>
-			</div>-->
-			{{ form.password }}
-
-		</div>
-
-		<div class="form-group">
-
-			{{ form.passwordConfirm.errors }}
-			<label for="{{ form.passwordConfirm.id_for_label }}" class="col-sm-2 control-label"> {{ form.passwordConfirm.label }}</label>
-			<!-- <div class="col-sm-9">
-				<input id="{{ form.passwordConfirm.id_for_label }}" name="{{ form.passwordConfirm.name }}" class="form-control" placeholder="{{ form.passwordConfirm.help_text }}" {% if form.passwordConfirm.value %} value="{{ form.passwordConfirm.value }}" {% endif %}>
-			</div> -->
-			{{ form.passwordConfirm }}
-
-		</div>
-
-		<div class="form-group">
-
-			{{ form.avatar.errors }}
-			<label for="{{ form.avatar.id_for_label }}" class="col-sm-2 control-label"> {{ form.avatar.label }}</label>
-			<div class="col-sm-9">
-				<img id="ask-newProfilePicture" class="img-circle" src="{{ profile.image.url }}">
-				<input id="{{ form.avatar.id_for_label }}" name="{{ form.avatar.name }}" class="form-control-file" type="file">
-			</div>
-
-		</div>
+		{% endfor %}
 
 		<div class="form-group">
 
@@ -73,7 +37,6 @@
 			</div>
 
 		</div>
-
 
 	</form>
 

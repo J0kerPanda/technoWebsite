@@ -12,25 +12,20 @@
 	<form class="col-md-10 form-horizontal ask-loginFormContainer" enctype="multipart/form-data" method="post">
 		{% csrf_token %}
 
+		{{ form.non_field_errors }}
+		{% for field in form %}
+
 		<div class="form-group">
 
-			{{ form.login.errors }}
-			<label for="{{ form.login.id_for_label }}" class="col-sm-2 control-label"> {{ form.login.label }}</label>
+			{{ field.errors }}
+			<label for="{{ field.id_for_label }}" class="col-sm-2 control-label"> {{ field.label }}</label>
 			<div class="col-sm-9">
-				<input id="{{ form.login.id_for_label }}" name="{{ form.login.name }}" class="form-control" type="text" placeholder="{{ form.login.help_text }}" {% if form.login.value %} value="{{ form.login.value }}" {% endif %} required>
+				{{ field }}
 			</div>
 
 		</div>
 
-		<div class="form-group">
-
-			{{ form.password.errors }}
-			<label for="{{ form.password.id_for_label }}" class="col-sm-2 control-label"> {{ form.password.label }}</label>
-			<div class="col-sm-9">
-				<input id="{{ form.password.id_for_label }}" name="{{ form.password.name }}" class="form-control" type="text" placeholder="{{ form.password.help_text }}" {% if form.password.value %} value="{{ form.password.value }}" {% endif %} required>
-			</div>
-
-		</div>
+		{% endfor %}
 
 		<div class="form-group">
 

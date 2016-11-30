@@ -50,7 +50,8 @@
 									<div>
 										{% url 'settings' as settingsURL %}
 										<a href="{{ settingsURL }}">Settings</a>
-										<a href="#">Log out</a>
+										{% url 'logout' as logoutURL %}
+										<a href="{{ logoutURL }}">Log out</a>
 									</div>
 								</div>
 
