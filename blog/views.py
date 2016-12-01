@@ -21,7 +21,7 @@ def makeBase( request ):
 	}
 
 	if ( request.user.is_authenticated ):
-		result[ 'profile' ] = Profile.objects.get_by_username( request.user.username )
+		result[ 'profile' ] = Profile.objects.get_by_login( request.user.username )
 
 	else:
 		result[ 'profile' ] = None
@@ -82,11 +82,9 @@ def answer( request, questionID=None ):
 	
 
 def siteLogin( request ):
-	result = makeBase( request )
-
 	redirectURL = '/'
-	if ( request.GET.get( 'next', False ) ):
-		redirectURL = request.GET.get( 'next', False )
+	if ( request.GET.get( 'continue', False ) ):
+		redirectURL = request.GET.get( 'continue', '/' )
 
 	if ( request.user.is_authenticated ):
 		return HttpResponseRedirect( redirectURL )
@@ -103,71 +101,75 @@ def siteLogin( request ):
 				login( request, user )
 				return HttpResponseRedirect( redirectURL )
 
+			form.add_error( '', 'Invalid login/password')
+
 	else:
 		form = blogForms.LoginForm()
 
+	result = makeBase( request )
 	result[ 'form' ] = form
 	return render( request, 'login.html', result )
 
 
 def signup( request ):
-	result = makeBase( request )
-
+	
 	if ( request.method == 'POST' ):
 		form = blogForms.NewUserForm( request.POST, request.FILES )
 		
 		if ( form.is_valid() ):
-
-			newUser = User.objects.create( 
-			username = form.cleaned_data[ 'login' ], 
-			email = form.cleaned_data[ 'email' ],
-			password = form.cleaned_data[ 'password' ] )
-			newUser.save()
-
-			newProfile = Profile.objects.create( 
-				user = newUser, 
-				rating = 0 )
-
-			if ( form.cleaned_data[ 'avatar' ] ):
-				newProfile.image = form.cleaned_data[ 'avatar' ]
-			newProfile.save()
-
+			form.save()
+			username = form.cleaned_data[ 'login' ]
+			password = form.cleaned_data[ 'password' ]
+			user = authenticate( username = username, password = password )
+			login( request, user )
 			return HttpResponseRedirect( '/' )
 
 	else:
 		form = blogForms.NewUserForm()
 
+	result = makeBase( request )
 	result[ 'form' ] = form
 	return render( request, 'signup.html', result )
 
-@login_required
+
+@login_required( redirect_field_name='continue' )
 def ask( request ):
 	result = makeBase( request )
 	return render( request, 'ask.html', result )
 
-@login_required
+
+@login_required( redirect_field_name='continue' )
 def settings( request ):
-	result = makeBase( request )
 
 	if ( request.method == 'POST' ):
-
 		form = blogForms.ChangeSettingsForm( request.POST, request.FILES )
 
-	else:
+		if ( form.is_valid() ):
 
+			if ( not request.user.check_password( form.cleaned_data[ 'password' ] ) ):
+				form.add_error( 'password', 'Incorrect password' )
+
+			else:
+				form.save( Profile.objects.get_by_login( request.user.username ) )
+
+	else:
 		form = blogForms.ChangeSettingsForm()
 
+	result = makeBase( request )
 	result[ 'form' ] = form
 	return render( request, 'settings.html', result )
 
+
 def siteLogout( request ):
+	redirectURL = '/'
+	if( request.META.get( 'HTTP_REFERER', False ) ):
+		redirectURL = request.META.get( 'HTTP_REFERER', '/' )
 
 	if ( request.user.is_authenticated ):
-
 		logout( request )
-		return HttpResponseRedirect( '/' )
+		return HttpResponseRedirect( redirectURL )
 
-	return HttpResponseRedirect( '/' )
+	return HttpResponseRedirect( redirectURL )
 	
 
 

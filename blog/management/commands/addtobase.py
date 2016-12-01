@@ -46,6 +46,7 @@ class Command( BaseCommand ):
 		newUser.save()
 		newProfile = Profile.objects.create( 
 			user = newUser, 
+			nickname = 'User' + str( userNumber ),
 			rating = random.randint( -100, 100 ) )
 		newProfile.image.name = 'user' + str( ( newProfile.id % 5 ) + 1 ) + '.png'
 		newProfile.save()

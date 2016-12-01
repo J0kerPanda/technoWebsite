@@ -27,6 +27,6 @@ urlpatterns = [
 	url(r'^login/$', blogViews.siteLogin, name="login"),
 	url(r'^signup/$', blogViews.signup, name="signup"),
 	url(r'^ask/$', blogViews.ask, name="askQuestion"),
-	url(r'^settings/$', blogViews.settings, name="settings" ),
+	url(r'^edit/$', blogViews.settings, name="settings" ),
 	url(r'^logout/$', blogViews.siteLogout, name="logout" ),
 ]

@@ -2,14 +2,17 @@
 
 {% load static %}
 
-{% block extraCSS %}<link rel="stylesheet" href="{% static "css/settings.css" %}"> {% endblock %}
+{% block extraCSS %}
+<link rel="stylesheet" href="{% static "css/settings.css" %}"> 
+<link rel="stylesheet" href="{% static "css/forms.css" %}"> 
+{% endblock %}
 
 {% block customContent %}
 <div class="container-fluid">
 
 	<h2>Settings: {{ profile.username }} </h2>
 
-	<form class="col-md-10 form-horizontal ask-settingsFormContainer" enctype="multipart/form-data" method="post">
+	<form class="col-md-10 form-horizontal ask-formContainer" enctype="multipart/form-data" method="post">
 		{% csrf_token %}
 
 		{{ form.non_field_errors }}
@@ -17,13 +20,13 @@
 
 		<div class="form-group">
 
-			{{ field.errors }}
 			<label for="{{ field.id_for_label }}" class="col-sm-2 control-label"> {{ field.label }}</label>
 			<div class="col-sm-9">
 				{% if field.label == "Avatar" %}
 				<img id="ask-currentProfilePicture" class="img-circle" src="{{ profile.image.url }}">
 				{% endif %}
 				{{ field }}
+				{{ field.errors }}
 			</div>
 
 		</div>

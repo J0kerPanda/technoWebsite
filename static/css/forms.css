@@ -1,0 +1,30 @@
+.ask-formContainer {
+
+	margin-top: 20px;
+}
+
+.form-group > .control-label {
+
+	font-size: 20px;
+	padding-top: 0px;
+}
+
+.errorlist {
+
+	list-style-type: none;
+	color: #ff0033;
+	font-size: 18px;
+}
+
+.errorlist.nonfield {
+
+	color: #ff0033;
+	font-size: 20px;
+}
+
+.form-group .errorlist {
+
+	margin-left: -40px;
+	margin-top: 5px;
+	margin-bottom: -5px;
+}

@@ -104,23 +104,29 @@ class ProfileManager( models.Manager ):
 		return super( ProfileManager, self ).order_by( '-rating' )
 
 
-	def get_by_username( self, name ):
-		return super( ProfileManager, self ).get( user__username=name )
+	def get_by_login( self, username ):
+		return super( ProfileManager, self ).get( user__username = username )
+
+
+	def get_by_nickname( self, nickname ):
+		return super( ProfileManager, self ).get( nickname = nickname )
+
 
 
 class Profile( models.Model ):
 	user = models.OneToOneField( User, null = False, blank = False, on_delete = models.CASCADE )
+	nickname = models.TextField( null = False, blank = False, max_length = 30 )
 	image = models.ImageField( null = False, blank = True, upload_to = '', default = 'dummy.png', max_length = 100 )
 	rating = models.IntegerField( null = False, default = 0 )
 	objects = ProfileManager()
 
 
-	def username( self ):
+	def login( self ):
 		return str( self.user.username )
 
 
 	def __str__( self ):
-		return self.username()
+		return self.login()
 
 
 	class Meta:

@@ -46,7 +46,7 @@
 								</div>
 
 								<div class="media-right">
-									<h4> {{ profile.username }}</h4>
+									<h4> {{ profile.nickname }}</h4>
 									<div>
 										{% url 'settings' as settingsURL %}
 										<a href="{{ settingsURL }}">Settings</a>
@@ -106,7 +106,7 @@
 					<ul class="list-unstyled ask-bestMembers">
 						
 					{% for member in bestMembers %}
-						<li><a href="#">{{ member.username }}</a></li>
+						<li><a href="#">{{ member.nickname }}</a></li>
 					{% endfor %}
 
 					</ul>
