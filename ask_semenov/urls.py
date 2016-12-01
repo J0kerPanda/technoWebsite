@@ -24,9 +24,9 @@ urlpatterns = [
 	url(r'^hot/$', blogViews.hotQuestions, name="hotQuestions"),
 	url(r'^tag/(?P<tag>\w+)/$', blogViews.taggedQuestions, name="taggedQuestions"),
 	url(r'^question/(?P<questionID>\d+)/$', blogViews.answer, name="answer"),
-	url(r'^login/$', blogViews.login, name="login"),
+	url(r'^login/$', blogViews.siteLogin, name="login"),
 	url(r'^signup/$', blogViews.signup, name="signup"),
 	url(r'^ask/$', blogViews.ask, name="askQuestion"),
 	url(r'^settings/$', blogViews.settings, name="settings" ),
-	url(r'^logout/$', blogViews.logout, name="logout" ),
+	url(r'^logout/$', blogViews.siteLogout, name="logout" ),
 ]

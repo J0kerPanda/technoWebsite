@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from django.http import HttpRequest
 from django.http import Http404
 
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from blog.models import Tag, Question, Answer, Profile, Vote
 
@@ -19,7 +21,7 @@ def makeBase( request ):
 	}
 
 	if ( request.user.is_authenticated ):
-		result[ 'profile' ] = Profile.objects.get_by_username( '123' )
+		result[ 'profile' ] = Profile.objects.get_by_username( request.user.username )
 
 	else:
 		result[ 'profile' ] = None
@@ -79,15 +81,29 @@ def answer( request, questionID=None ):
 	return render( request, 'answer.html', result )
 	
 
-def login( request ):
+def siteLogin( request ):
 	result = makeBase( request )
 
-	if ( request.method == 'POST' ):
+	redirectURL = '/'
+	if ( request.GET.get( 'next', False ) ):
+		redirectURL = request.GET.get( 'next', False )
 
+	if ( request.user.is_authenticated ):
+		return HttpResponseRedirect( redirectURL )
+
+	if ( request.method == 'POST' ):
 		form = blogForms.LoginForm( request.POST )
 
-	else:
+		if ( form.is_valid() ):
+			username = form.cleaned_data[ 'login' ]
+			password = form.cleaned_data[ 'password' ]
+			user = authenticate( username = username, password = password )
 
+			if user is not None:
+				login( request, user )
+				return HttpResponseRedirect( redirectURL )
+
+	else:
 		form = blogForms.LoginForm()
 
 	result[ 'form' ] = form
@@ -98,7 +114,6 @@ def signup( request ):
 	result = makeBase( request )
 
 	if ( request.method == 'POST' ):
-
 		form = blogForms.NewUserForm( request.POST, request.FILES )
 		
 		if ( form.is_valid() ):
@@ -108,6 +123,7 @@ def signup( request ):
 			email = form.cleaned_data[ 'email' ],
 			password = form.cleaned_data[ 'password' ] )
 			newUser.save()
+
 			newProfile = Profile.objects.create( 
 				user = newUser, 
 				rating = 0 )
@@ -119,17 +135,17 @@ def signup( request ):
 			return HttpResponseRedirect( '/' )
 
 	else:
-
 		form = blogForms.NewUserForm()
 
 	result[ 'form' ] = form
 	return render( request, 'signup.html', result )
 
-
+@login_required
 def ask( request ):
 	result = makeBase( request )
 	return render( request, 'ask.html', result )
 
+@login_required
 def settings( request ):
 	result = makeBase( request )
 
@@ -144,10 +160,11 @@ def settings( request ):
 	result[ 'form' ] = form
 	return render( request, 'settings.html', result )
 
-def logout( request ):
+def siteLogout( request ):
 
 	if ( request.user.is_authenticated ):
 
+		logout( request )
 		return HttpResponseRedirect( '/' )
 
 	return HttpResponseRedirect( '/' )
