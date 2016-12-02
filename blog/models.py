@@ -17,6 +17,10 @@ class TagManager( models.Manager ):
 		return super( TagManager, self ).annotate( questionCount = models.Count( 'question' ) ).order_by( '-questionCount' )
 
 
+	def get_by_name( self, name ):
+		return super( TagManager, self ).get( caption = name )
+
+
 class Tag( models.Model ):
 	caption = models.CharField( unique = True, null = False, blank = False, max_length = 20 )
 	objects = TagManager()

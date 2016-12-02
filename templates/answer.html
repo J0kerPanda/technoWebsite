@@ -2,7 +2,10 @@
 
 {% load static %}
 
-{% block extraCSS %}<link rel="stylesheet" href="{% static "css/answer.css" %}"> {% endblock %}
+{% block extraCSS %}
+<link rel="stylesheet" href="{% static "css/answer.css" %}">
+<link rel="stylesheet" href="{% static "css/forms.css" %}"> 
+{% endblock %}
 
 {% block customContent %}
 <div class="container-fluid">
@@ -59,17 +62,22 @@
 	{% endfor %}					
 	</div> <!-- answers list end -->
 
-	<div class="container-fluid col-md-11 ask-formContainer">
-		<form>
+	<form id="answerForm" class="col-md-11 ask-formContainer" enctype="multipart/form-data" method="post">
+		{% csrf_token %}
 
-			<div class="form-group">
+		{{ form.non_field_errors }}
+		{% for field in form %}
 
-					<textarea id="ask-answerTextInput" class="form-control" type="text" rows="7" placeholder="Place your answer here"></textarea>
-			</div>
-			<button type="submit" class="btn btn-default">Answer!</button>
+		<div class="form-group">
+			{{ field }}
+			{{ field.errors }}
+		</div>
 
-		</form>
-	</div>
+		{% endfor %}
+
+		<button type="submit" class="btn btn-default">Answer!</button>
+
+	</form>
 
 </div>
 {% endblock %}

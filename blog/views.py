@@ -76,8 +76,25 @@ def taggedQuestions( request, tag=None ):
 
 
 def answer( request, questionID=None ):
+	currentQuestion = get_object_or_404( Question, id = questionID )
+
+	if ( request.method == 'POST' ):
+		form = blogForms.AnswerForm( request.POST )
+
+		if ( not request.user.is_authenticated ):
+			form.add_error( None, 'You must be logged in to post answers' )
+		
+		if ( form.is_valid() ):
+			newAnswer = form.save( currentQuestion, Profile.objects.get_by_login( request.user.username ) )
+			anchor = '#' + str( newAnswer.id )
+			return HttpResponseRedirect( '/question/' + questionID + '/' + anchor )
+
+	else:
+		form = blogForms.AnswerForm()
+
 	result = makeBase( request )
-	result[ 'question' ] = get_object_or_404( Question, id = questionID )
+	result[ 'form' ] = form
+	result[ 'question' ] = currentQuestion
 	return render( request, 'answer.html', result )
 	
 
@@ -101,7 +118,7 @@ def siteLogin( request ):
 				login( request, user )
 				return HttpResponseRedirect( redirectURL )
 
-			form.add_error( '', 'Invalid login/password')
+			form.add_error( None, 'Invalid login/password')
 
 	else:
 		form = blogForms.LoginForm()
@@ -112,7 +129,9 @@ def siteLogin( request ):
 
 
 def signup( request ):
-	
+	if ( request.user.is_authenticated ):
+		return HttpResponseRedirect( '/' )
+
 	if ( request.method == 'POST' ):
 		form = blogForms.NewUserForm( request.POST, request.FILES )
 		
@@ -134,7 +153,19 @@ def signup( request ):
 
 @login_required( redirect_field_name='continue' )
 def ask( request ):
+
+	if ( request.method == 'POST' ):
+		form = blogForms.AskForm( request.POST )
+		
+		if ( form.is_valid() ):
+			newQuestion = form.save( Profile.objects.get_by_login( request.user.username ) )
+			return HttpResponseRedirect( '/question/' + str( newQuestion.id ) + '/' )
+
+	else:
+		form = blogForms.AskForm()
+
 	result = makeBase( request )
+	result[ 'form' ] = form
 	return render( request, 'ask.html', result )
 
 
@@ -151,6 +182,7 @@ def settings( request ):
 
 			else:
 				form.save( Profile.objects.get_by_login( request.user.username ) )
+				form = blogForms.ChangeSettingsForm()
 
 	else:
 		form = blogForms.ChangeSettingsForm()

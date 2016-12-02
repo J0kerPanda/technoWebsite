@@ -84,7 +84,9 @@ class NewUserForm( forms.Form ):
 
 		if ( self.cleaned_data[ 'avatar' ] ):
 			newProfile.image = self.cleaned_data[ 'avatar' ]
+		
 		newProfile.save()
+		return newProfile
 
 
 class ChangeSettingsForm( forms.Form ):
@@ -140,3 +142,62 @@ class ChangeSettingsForm( forms.Form ):
 			profile.image = self.cleaned_data[ 'avatar' ]
 
 		profile.save()
+		return profile
+
+class AskForm( forms.Form ):
+	title = forms.CharField( 
+		required = True, 
+		label = 'Title', 
+		widget = forms.TextInput( attrs={ 'class': 'form-control', 'placeholder': 'Write your question title here' } ) )
+	text = forms.CharField( 
+		required = True, 
+		label = 'Text', 
+		widget = forms.Textarea( attrs={ 'class': 'form-control', 'placeholder': 'Write your question here', 'rows': '15' } ) )
+	tags = forms.CharField( 
+		required = False, 
+		label = 'Tags', 
+		widget = forms.TextInput( attrs={ 'class': 'form-control', 'placeholder': 'Write tags for your question here' } ) )
+
+
+	def clean( self ):
+		tags = self.cleaned_data[ 'tags' ].split()
+
+		for tag in tags:
+			if ( len( tag ) > 30 ):
+				self.add_error( 'tags', 'Some of the tags are too long' )
+				return
+
+
+
+	def save( self, profile ):
+		newQuestion = Question.objects.create(
+			caption = self.cleaned_data[ 'title' ], 
+			text = self.cleaned_data[ 'text' ],
+			author = profile )
+		tags = self.cleaned_data[ 'tags' ].split()
+
+		for tag in tags:
+			try:
+				tagToAdd = Tag.objects.get_by_name( tag )
+				newQuestion.tags.add( tagToAdd )
+
+			except:
+				newQuestion.tags.add( Tag.objects.create( caption = tag ) )
+
+		newQuestion.save()
+		return newQuestion
+
+class AnswerForm( forms.Form ):
+	text = forms.CharField( 
+		required = True, 
+		label = 'Text', 
+		widget = forms.Textarea( attrs={ 'class': 'form-control', 'placeholder': 'Write your answer here', 'rows': '7' } ) )
+
+
+	def save( self, question, profile ):
+		newAnswer = Answer.objects.create( 
+			text = self.cleaned_data[ 'text' ],
+			question = question,
+			author = profile )
+
+		return newAnswer
