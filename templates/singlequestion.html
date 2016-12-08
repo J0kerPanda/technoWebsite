@@ -1,6 +1,6 @@
 {% load static %}
 
-<div class="well well-sm ask-questionListElement">
+<div id="question{{ question.id }}" class="well well-sm ask-questionListElement">
 	<div class="media">
 		
 		<div class="media-left ask-questionListElementUserBlock">
@@ -15,7 +15,7 @@
 					{{ question.rating }}
 				</div>
 				
-				<div class="btn-group-vertical pull-left ask-ratingButtonsGroup" role="group">
+				<div id="qrbg{{ question.id }}"class="btn-group-vertical pull-left ask-questionRatingButtonsGroup" role="group">
 						<button type="button" class="btn ask-ratingButton ask-ratingUpButton"></button>
 						<button type="button" class="btn ask-ratingButton ask-ratingDownButton"></button>
 				</div>

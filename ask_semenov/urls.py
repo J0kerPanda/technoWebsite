@@ -29,4 +29,5 @@ urlpatterns = [
 	url(r'^ask/$', blogViews.ask, name="askQuestion"),
 	url(r'^edit/$', blogViews.settings, name="settings" ),
 	url(r'^logout/$', blogViews.siteLogout, name="logout" ),
+	url(r'^votes/$', blogViews.votes, name="votes" ),
 ]

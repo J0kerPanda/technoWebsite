@@ -1,12 +1,12 @@
 {% load static %}
 
-<div class="well well-sm ask-container">
+<div id="answer{{ answer.id }}" class="well well-sm ask-container">
 				
 	<div class="media">
 		
 		<div class="media-left ask-answerUserBlock">
 
-			<a id={{ answer.id }} href="#">
+			<a href="#">
 				<img class="media-object img-circle ask-answerProfileImage" src="{{ answer.author.image.url }}">
 			</a>
 
@@ -16,7 +16,7 @@
 					{{ answer.rating }}
 				</div>
 				
-				<div class="btn-group-vertical pull-left ask-answerRatingButtonsGroup" role="group">
+				<div id="arbg{{ answer.id }}" class="btn-group-vertical pull-left ask-answerRatingButtonsGroup" role="group">
 						<button type="button" class="btn ask-ratingButton ask-ratingUpButton"></button>
 						<button type="button" class="btn ask-ratingButton ask-ratingDownButton"></button>
 				</div>

@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block extraCSS %}
+{% block extras %}
 <link rel="stylesheet" href="{% static "css/answer.css" %}">
 <link rel="stylesheet" href="{% static "css/forms.css" %}"> 
 {% endblock %}
@@ -10,7 +10,7 @@
 {% block customContent %}
 <div class="container-fluid">
 
-	<div class="container-fluid col-md-11 ask-container ask-bottomBordered">
+	<div id="question{{ question.id }}" class="container-fluid col-md-11 ask-container ask-bottomBordered">
 
 		<div class="media">
 						
@@ -26,7 +26,7 @@
 						{{ question.rating }}
 					</div>
 					
-					<div class="btn-group-vertical pull-left ask-questionRatingButtonsGroup" role="group">
+					<div id="qrbg{{ question.id }}" class="btn-group-vertical pull-left ask-questionRatingButtonsGroup" role="group">
 							<button type="button" class="btn ask-ratingButton ask-ratingUpButton"></button>
 							<button type="button" class="btn ask-ratingButton ask-ratingDownButton"></button>
 					</div>
@@ -80,4 +80,6 @@
 	</form>
 
 </div>
+
+<script src="{% static "js/main.js" %}"></script>
 {% endblock %}

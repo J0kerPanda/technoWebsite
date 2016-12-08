@@ -1,17 +1,18 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 
-from django.http import HttpResponseRedirect 
-from django.http import HttpResponse
-from django.http import HttpRequest
-from django.http import Http404
+from django.http import HttpResponseRedirect, HttpResponse, HttpRequest, JsonResponse, Http404
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
+from django.views.decorators.http import require_POST
+
 from blog.models import Tag, Question, Answer, Profile, Vote
 
 import blog_forms as blogForms
+import json
 
 def makeBase( request ):
 
@@ -86,7 +87,7 @@ def answer( request, questionID=None ):
 		
 		if ( form.is_valid() ):
 			newAnswer = form.save( currentQuestion, Profile.objects.get_by_login( request.user.username ) )
-			anchor = '#' + str( newAnswer.id )
+			anchor = '#answer' + str( newAnswer.id )
 			return HttpResponseRedirect( '/question/' + questionID + '/' + anchor )
 
 	else:
@@ -202,10 +203,53 @@ def siteLogout( request ):
 		return HttpResponseRedirect( redirectURL )
 
 	return HttpResponseRedirect( redirectURL )
-	
+
+@require_POST
+def votes( request ):
+	data = {}
+
+	try:
+
+		if ( request.user.is_authenticated ):
+			objectID = request.POST.get( 'object_id' )
+			objectType = request.POST.get( 'object_type' )
+
+			if ( objectType == 'question' ):
+				objectType = ContentType.objects.get( model = 'question' )
+				voteObject = Question.objects.get( id = objectID )
+
+			elif ( objectType == 'answer' ):
+				objectType = ContentType.objects.get( model = 'answer' )
+				voteObject = Answer.objects.get( id = objectID )
+
+			else:
+				raise Exception()
+
+			profile = Profile.objects.get_by_login( request.user.username )
+
+			if ( Vote.objects.filter( profile = profile, related_type = objectType, related_id = voteObject.id ) ):
+				raise Exception( 'Already exists' )
+
+			voteType = request.POST.get( 'vote_type' )
+
+			if ( voteType == 'like' ):
+				voteType = True
+
+			elif ( voteType == 'dislike' ):
+				voteType = False
+
+			else:
+				raise Exception()
+
+			
+			newVote = Vote.objects.create( profile = profile, is_positive = voteType, related_object = voteObject )
+
+	except Exception as err:
+		data[ 'error' ] = str( err )
 
 
-
+	finally:
+		return JsonResponse( data )
 
 
 

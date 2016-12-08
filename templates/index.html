@@ -2,7 +2,7 @@
 
 {% load static %}
 
-{% block extraCSS %}<link rel="stylesheet" href="{% static "css/questionlist.css" %}"> {% endblock %}
+{% block extras %}<link rel="stylesheet" href="{% static "css/questionlist.css" %}"> {% endblock %}
 
 {% block customContentCaption %}
 <div class="container-fluid">
@@ -46,4 +46,5 @@
   </ul>
 </nav>
 
+<script src="{% static "js/main.js" %}"></script>
 {% endblock %}
