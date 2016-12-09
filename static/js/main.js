@@ -47,16 +47,25 @@ $(".ask-ratingButton").click( function() {
 		o_t = "answer";
 	}
 
+	var o_i = $(this).parent().attr('id').substr(4);
+
 	$.ajax({
 
 		url: "/votes/",
 		type : "POST",
-		data : { object_type: o_t, object_id : $(this).parent().attr('id').substr(4), vote_type : v_t },
+		data : { object_type: o_t, object_id : o_i, vote_type : v_t },
 
 		success: function( json ) {
 
-			console.log( json );
-			console.log( 'success!' );
+			if ( !json[ 'error'] ) {
+				var new_rating = json[ 'new_rating'];
+				$("#" + o_t[0] + "rf" + o_i).html( new_rating );
+				console.log( 'success!');
+
+			} else {
+
+				console.log( json[ 'error' ] );
+			}
 		}
 	});
 });

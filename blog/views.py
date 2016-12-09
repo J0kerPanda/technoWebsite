@@ -243,6 +243,11 @@ def votes( request ):
 
 			
 			newVote = Vote.objects.create( profile = profile, is_positive = voteType, related_object = voteObject )
+			voteObject.refresh_from_db()
+			data[ 'new_rating' ] = voteObject.rating
+
+		else:
+			data[ 'error' ] = 'You must be logged in';
 
 	except Exception as err:
 		data[ 'error' ] = str( err )

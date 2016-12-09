@@ -11,11 +11,11 @@
 
 			<div class="ask-questionRatingBlock">
 
-				<div class="well pull-left text-right ask-questionRatingField">
+				<div id="qrf{{ question.id }}" class="well pull-left text-right ask-questionRatingField">
 					{{ question.rating }}
 				</div>
 				
-				<div id="qrbg{{ question.id }}"class="btn-group-vertical pull-left ask-questionRatingButtonsGroup" role="group">
+				<div id="qrbg{{ question.id }}" class="btn-group-vertical pull-left ask-questionRatingButtonsGroup" role="group">
 						<button type="button" class="btn ask-ratingButton ask-ratingUpButton"></button>
 						<button type="button" class="btn ask-ratingButton ask-ratingDownButton"></button>
 				</div>
