@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
 
@@ -101,7 +102,7 @@ def answer( request, questionID=None ):
 
 def siteLogin( request ):
 	redirectURL = '/'
-	if ( request.GET.get( 'continue', False ) ):
+	if ( request.GET.get( 'continue' ) ):
 		redirectURL = request.GET.get( 'continue', '/' )
 
 	if ( request.user.is_authenticated ):
@@ -195,7 +196,7 @@ def settings( request ):
 
 def siteLogout( request ):
 	redirectURL = '/'
-	if( request.META.get( 'HTTP_REFERER', False ) ):
+	if( request.META.get( 'HTTP_REFERER' ) ):
 		redirectURL = request.META.get( 'HTTP_REFERER', '/' )
 
 	if ( request.user.is_authenticated ):
@@ -204,15 +205,23 @@ def siteLogout( request ):
 
 	return HttpResponseRedirect( redirectURL )
 
-@require_POST
 def votes( request ):
 	data = {}
 
 	try:
 
 		if ( request.user.is_authenticated ):
-			objectID = request.POST.get( 'object_id' )
-			objectType = request.POST.get( 'object_type' )
+
+			if ( request.method == 'GET' ):
+				objectID = request.GET[ 'object_id' ]
+				objectType = request.GET[ 'object_type' ]
+
+			elif ( request.method == 'POST' ):
+				objectID = request.POST[ 'object_id' ]
+				objectType = request.POST[ 'object_type' ]
+
+			else:
+				raise Exception( '405' )
 
 			if ( objectType == 'question' ):
 				objectType = ContentType.objects.get( model = 'question' )
@@ -223,38 +232,107 @@ def votes( request ):
 				voteObject = Answer.objects.get( id = objectID )
 
 			else:
-				raise Exception()
+				raise Exception( '400' )
 
 			profile = Profile.objects.get_by_login( request.user.username )
 
 			if ( Vote.objects.filter( profile = profile, related_type = objectType, related_id = voteObject.id ) ):
-				raise Exception( 'Already exists' )
+				raise Exception( '500' )
 
-			voteType = request.POST.get( 'vote_type' )
+			if ( request.method == 'POST' ):
+				voteType = request.POST.get( 'vote_type' )
 
-			if ( voteType == 'like' ):
-				voteType = True
+				if ( voteType == 'like' ):
+					voteType = True
 
-			elif ( voteType == 'dislike' ):
-				voteType = False
+				elif ( voteType == 'dislike' ):
+					voteType = False
 
-			else:
-				raise Exception()
+				else:
+					raise Exception( '400' )
 
-			
-			newVote = Vote.objects.create( profile = profile, is_positive = voteType, related_object = voteObject )
-			voteObject.refresh_from_db()
-			data[ 'new_rating' ] = voteObject.rating
+				newVote = Vote.objects.create( profile = profile, is_positive = voteType, related_object = voteObject )
+				voteObject.refresh_from_db()
+				data[ 'new_rating' ] = voteObject.rating
 
 		else:
-			data[ 'error' ] = 'You must be logged in';
+			data[ 'error' ] = '403';
+
+	except ( ObjectDoesNotExist, KeyError ) as err:
+		data[ 'error' ] = '404';
 
 	except Exception as err:
 		data[ 'error' ] = str( err )
 
+	finally:
+
+		if not data.get( 'error' ):
+			data[ 'error' ] = '200';
+
+		return JsonResponse( data )
+
+def correct( request ):
+	data = {}
+
+	try:
+
+		if ( request.user.is_authenticated ):
+
+			if ( request.method == 'GET' ):
+				questionID = request.GET[ 'question_id' ]
+
+			elif ( request.method == 'POST' ):
+				questionID = request.POST[ 'question_id' ]
+
+			else:
+				raise Exception( '400' )
+
+			question = Question.objects.get( id = questionID )
+			profile = Profile.objects.get_by_login( request.user.username )
+
+			if ( question.author == profile ):
+
+				if ( request.method == 'POST' ):
+					
+					answer = Answer.objects.get( id = request.POST[ 'answer_id' ] )
+					answer.correct = not answer.correct
+					answer.save()
+
+			else:
+				raise Exception( '500' )
+
+		else:
+			data[ 'error' ] = '403';
+
+	except ( ObjectDoesNotExist, KeyError ) as err:
+		data[ 'error' ] = '404';
+
+	except Exception as err:
+		data[ 'error' ] = str( err )
 
 	finally:
+
+		if not data.get( 'error' ):
+			data[ 'error' ] = '200';
+
 		return JsonResponse( data )
+
+
+			
+
+
+
+			
+
+
+
+
+
+
+
+
+
+	
 
 
 
