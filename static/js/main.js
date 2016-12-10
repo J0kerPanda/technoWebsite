@@ -101,7 +101,8 @@ $(document).ready( function() {
 
 	$(".ask-answerBottomLine").each( function() {
 
-		var q_i = $(this).attr('id').substr(3);
+		var q_i = $(".ask-bigQuestion").attr('id').substr(8);
+		var a_i = $(this).attr( "id" ).substr(3);
 
 		$.ajax({
 
@@ -113,7 +114,8 @@ $(document).ready( function() {
 
 				if ( json[ "error" ] != "200" ) {
 					
-					$("#abl" + q_i).hide();
+					$("#abl" + a_i).hide();
+					console.log( json[ 'error' ] );
 				}
 			}
 		});
@@ -121,14 +123,19 @@ $(document).ready( function() {
 
 	$("[id^='cacb']").click( function() {
 
-		var q_i = $(this).closest( ".ask-answerBottomLine" ).attr( "id" ).substr(3);
+		var q_i = $(".ask-bigQuestion").attr('id').substr(8);
 		var a_i = $(this).attr( "id" ).substr(4);
 
 		$.ajax({
 
 			url: "/correct/",
 			type: "POST",
-			data : { question_id: q_i, answer_id: a_i }
+			data : { question_id: q_i, answer_id: a_i },
+
+			success: function( json ) {
+
+				console.log( json[ 'error '] );
+			}
 		});
 	});
 });
