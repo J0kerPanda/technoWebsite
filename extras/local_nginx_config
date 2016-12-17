@@ -1,0 +1,78 @@
+user www-data;
+pid logs/nginx.pid;
+
+events {
+    worker_connections 1024;
+    use epoll;
+}
+
+http {
+
+    include mime.types;
+    default_type application/octet-stream;
+
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+
+    gzip on;
+    proxy_cache_path /home/anton/ask_semenov/cache keys_zone=cache1:10m;
+
+    push_stream_shared_memory_size 100m;
+
+    upstream backend {
+
+        server 127.0.0.1:8081;
+    }
+
+    server {
+
+        listen 80;
+        server_name asksemenov.com www.asksemenov.com;
+        root /home/anton/ask_semenov;
+        add_header X-Cache-Status $upstream_cache_status;
+
+        location ^~ /publish-answers/ {
+
+            push_stream_publisher;  
+            push_stream_store_messages off;
+            set $push_channel_id $arg_cid;
+            push_stream_channels_path $arg_cid;
+            allow 127.0.0.1;
+            deny all;
+        }
+
+        location ^~ /get-answers/ {
+
+            push_stream_subscriber;
+            set $push_channel_id $arg_cid;
+            push_stream_channels_path $arg_cid;
+            default_type application/json;   
+        }
+
+        location ^~ /uploads/ {
+
+            expires 1h;
+            add_header Cache-Control "public";
+        }
+
+        location ~ \.\w+$ {
+
+            #root /home/anton/ask_semenov/static;
+            expires 1h;
+            add_header Cache-Control "public";
+        }
+
+        location ~ \/$ {
+
+            proxy_cache cache1;
+            proxy_cache_key "$host$request_uri";
+            proxy_cache_valid 200 5s;
+            proxy_pass http://backend;
+        }
+
+    }
+}
+

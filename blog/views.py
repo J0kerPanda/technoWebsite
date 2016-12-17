@@ -14,6 +14,7 @@ from blog.models import Tag, Question, Answer, Profile, Vote
 
 import blog_forms as blogForms
 import json
+import requests
 
 def makeBase( request ):
 
@@ -30,7 +31,6 @@ def makeBase( request ):
 
 	return result
 		
-
 
 def Paginate( request, container, perPage ):
 	paginator = Paginator( container, perPage )
@@ -61,7 +61,6 @@ def mainPage( request ):
 	return render( request, 'index.html', result )
 	
 
-
 def hotQuestions( request ):
 	result = makeBase( request )
 	questions = Question.objects.rating_sorted()
@@ -88,6 +87,11 @@ def answer( request, questionID=None ):
 		
 		if ( form.is_valid() ):
 			newAnswer = form.save( currentQuestion, Profile.objects.get_by_login( request.user.username ) )
+			response = requests.post( 'http://asksemenov.com/publish-answers/',
+				data = { 'channel_id' : 5, 
+				'answer': render( request, 'singleanswer.html', { 'answer': newAnswer } ) } 
+				)
+
 			anchor = '#answer' + str( newAnswer.id )
 			return HttpResponseRedirect( '/question/' + questionID + '/' + anchor )
 
@@ -205,6 +209,7 @@ def siteLogout( request ):
 
 	return HttpResponseRedirect( redirectURL )
 
+
 def votes( request ):
 	data = {}
 
@@ -293,7 +298,6 @@ def correct( request ):
 			if ( question.author == profile ):
 
 				if ( request.method == 'POST' ):
-					
 					answer = Answer.objects.get( id = request.POST[ 'answer_id' ] )
 					answer.correct = not answer.correct
 					answer.save()
@@ -311,13 +315,10 @@ def correct( request ):
 		data[ 'error' ] = str( err )
 
 	finally:
-
 		if not data.get( 'error' ):
 			data[ 'error' ] = '200';
 
 		return JsonResponse( data )
-
-
 			
 
 

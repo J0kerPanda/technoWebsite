@@ -32,6 +32,7 @@ $.ajaxSetup({
 
 $(document).ready( function() {
 
+	//hide rating buttons
 	$("div[id*='rbg']").each( function() {
 
 		var o_t;
@@ -41,7 +42,7 @@ $(document).ready( function() {
 			o_t = "answer";
 		}
 
-		var o_i = $(this).attr( "id" ).substr(4);
+		var o_i = $(this).attr( "id" ).substr(4); //qrbg or arbg
 		var flag = false;
 
 		$.ajax({
@@ -60,6 +61,7 @@ $(document).ready( function() {
 		});
 	});
 
+	//add clicks on rating buttons
 	$(".ask-ratingButton").on( 'click', function() {
 
 		var v_t;
@@ -76,7 +78,7 @@ $(document).ready( function() {
 			o_t = "answer";
 		}
 
-		var o_i = $(this).parent().attr('id').substr(4);
+		var o_i = $(this).parent().attr('id').substr(4); //qrbg or arbg
 
 		$.ajax({
 
@@ -99,6 +101,7 @@ $(document).ready( function() {
 		});
 	});
 
+	//hide correct answer buttons for non-creators
 	$(".ask-answerBottomLine").each( function() {
 
 		var q_i = $(".ask-bigQuestion").attr('id').substr(8);
@@ -121,10 +124,11 @@ $(document).ready( function() {
 		});
 	});
 
+	//add correct answer clicks
 	$("[id^='cacb']").click( function() {
 
-		var q_i = $(".ask-bigQuestion").attr('id').substr(8);
-		var a_i = $(this).attr( "id" ).substr(4);
+		var q_i = $(".ask-bigQuestion").attr('id').substr(8);	
+		var a_i = $(this).attr( "id" ).substr( 'cacb'.length ); //cacb
 
 		$.ajax({
 
