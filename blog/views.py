@@ -1,6 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
+from django.template.loader import render_to_string
 
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest, JsonResponse, Http404
 
@@ -87,11 +88,11 @@ def answer( request, questionID=None ):
 		
 		if ( form.is_valid() ):
 			newAnswer = form.save( currentQuestion, Profile.objects.get_by_login( request.user.username ) )
+			anchor = '#answer' + str( newAnswer.id )
 			response = requests.post( 'http://asksemenov.com/publish-answers/',
-				data = { 'channel_id' : 5, 
-				'answer': render( request, 'singleanswer.html', { 'answer': newAnswer } ) } 
+				params = { 'cid' : 5 },
+				data = json.dumps( { 'answer': render_to_string( 'singleanswer.html', { 'answer': newAnswer } ) } )
 				)
-
 			anchor = '#answer' + str( newAnswer.id )
 			return HttpResponseRedirect( '/question/' + questionID + '/' + anchor )
 

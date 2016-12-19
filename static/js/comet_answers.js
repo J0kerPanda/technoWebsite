@@ -11,27 +11,37 @@ function getAnswersIDs() {
 	return ids;
 }
 
-function getComet_Answers() {
+function handleNewAnswer() {
+
+	var q_i = $(".ask-bigQuestion").attr( "id" ).substr( "question".length );
+	var a_i = $(".ask-answerBottomLine").last().attr( "id" ).substr( "abl".length );
+	hideRatingButtons( "answer", a_i );
+	hideCorrectCheckbox( q_i, a_i );
+}
+
+function getCometAnswers() {
 
 	$.ajax( {
 
-		url: '/get-answers/', 
-		type: 'GET',
+		url: "/get-answers/", 
+		type: "GET",
 		data: { cid: 5 },
 
-		success: function( response ) {
+		success: function( json ) {
 
-			console.log( 'success ');
-			console.log( response );
-			getComet_Answers()
+			var newAnswer = document.createElement( "div" );
+			newAnswer.innerHTML = json[ "answer" ];
+			$( ".ask-answer" ).last().after( newAnswer );
+			handleNewAnswer();
+
+			getCometAnswers();
 		},
 
 		error: function() {
 
-			console.log( 'failure' );
-			setTimeout( getComet_Answers, 5000 );
+			setTimeout( getCometAnswers, 5000 );
 		},
 	});
 }
 
-$(document).ready( getComet_Answers() );
+$(document).ready( getCometAnswers() );
