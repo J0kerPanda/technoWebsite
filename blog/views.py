@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, get_object_or_404
@@ -20,8 +21,8 @@ import requests
 def makeBase( request ):
 
 	result = { 
-		'hotTags': Tag.objects.rating_sorted()[:10],
-		'bestMembers': Profile.objects.rating_sorted()[:10],
+		'hotTags': cache.get( 'popular_tags' ),
+		'bestMembers': cache.get( 'best_members' ),
 	}
 
 	if ( request.user.is_authenticated ):

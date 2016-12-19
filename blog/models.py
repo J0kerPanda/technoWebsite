@@ -13,9 +13,6 @@ from datetime import datetime
 
 
 class TagManager( models.Manager ):
-	def rating_sorted( self ):
-		return super( TagManager, self ).annotate( questionCount = models.Count( 'question' ) ).order_by( '-questionCount' )
-
 
 	def get_by_name( self, name ):
 		return super( TagManager, self ).get( caption = name )
@@ -92,6 +89,7 @@ class Answer( models.Model ):
 	text = models.TextField( null = False, blank = False )
 	correct = models.BooleanField( null = False, blank = False, default = False )
 	question = models.ForeignKey( 'Question', null = False, blank = False, on_delete = models.CASCADE )
+	postDate = models.DateTimeField( null = False, blank = True, auto_now_add = True )
 	author = models.ForeignKey( 'Profile', null = False, blank = False, on_delete = models.CASCADE )
 
 
