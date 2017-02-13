@@ -1,3 +1,0 @@
-Question forum-like web application setup using nginx, gunicorn and django framework.
-Database used - sqlite.
-
